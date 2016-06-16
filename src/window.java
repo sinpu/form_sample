@@ -19,6 +19,7 @@ import javax.swing.JTextPane;
 import java.awt.Component;
 import javax.swing.AbstractListModel;
 
+import main.frame.HomePanel;
 import main.frame.LearningPanel;
 import menu.MenuListModel;
 import javax.swing.JLabel;
@@ -73,9 +74,12 @@ public class window {
 		frame.getContentPane().add(splitPane);
 		
 		//main frame view
-		JPanel panel = new LearningPanel();
+		JPanel panel = new HomePanel();
 		splitPane.setRightComponent(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		//Home パネルを変えると，レイアウトも変える必要がある
+		
+		//panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setLayout(new GridLayout(2, 3, 0, 0));
 		
 		
 		//menu view
