@@ -27,11 +27,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
-
+import menu.*;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class EditWindow {
 
 	private JFrame frame;
+	private JTextField txtHelloLearner;
 
 	/**
 	 * Launch the application.
@@ -50,6 +53,7 @@ public class EditWindow {
 		});
 	}
 	*/
+	
 
 	/**
 	 * Create the application.
@@ -74,9 +78,20 @@ public class EditWindow {
 		frame.getContentPane().add(splitPane);
 		
 		//main frame view
-		JPanel panel = new LearningPanel();
+		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		txtHelloLearner = new JTextField();
+		txtHelloLearner.setFont(new Font("Dialog", Font.BOLD, 23));
+		txtHelloLearner.setHorizontalAlignment(SwingConstants.CENTER);
+		txtHelloLearner.setText("Hello　Learner！");
+		panel.add(txtHelloLearner);
+		txtHelloLearner.setColumns(10);
+		
+		JButton btnNewButton = new JButton("Click Start!");
+		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 19));
+		panel.add(btnNewButton);
 		
 		
 		//menu view
