@@ -1,3 +1,4 @@
+package sub.window;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -28,19 +29,19 @@ import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 
 
-public class window {
+public class EditWindow {
 
 	private JFrame frame;
 
 	/**
 	 * Launch the application.
 	 */
-	
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window window = new window();
+					EditWindow window = new EditWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,12 +49,12 @@ public class window {
 			}
 		});
 	}
-	
+	*/
 
 	/**
 	 * Create the application.
 	 */
-	public window() {
+	public EditWindow() {
 		initialize();
 	}
 
