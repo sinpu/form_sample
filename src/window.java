@@ -19,6 +19,7 @@ import javax.swing.JTextPane;
 import java.awt.Component;
 import javax.swing.AbstractListModel;
 
+import main.frame.LearningPanel;
 import menu.MenuListModel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -68,7 +69,7 @@ public class window {
 		JSplitPane splitPane = new JSplitPane();
 		frame.getContentPane().add(splitPane);
 		
-		JPanel panel = new JPanel();
+		JPanel panel = new LearningPanel();
 		splitPane.setRightComponent(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
