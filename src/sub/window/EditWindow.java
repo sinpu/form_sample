@@ -82,6 +82,7 @@ public class EditWindow {
 		splitPane.setRightComponent(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
+		//main view program
 		txtHelloLearner = new JTextField();
 		txtHelloLearner.setFont(new Font("Dialog", Font.BOLD, 23));
 		txtHelloLearner.setHorizontalAlignment(SwingConstants.CENTER);
