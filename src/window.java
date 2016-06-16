@@ -1,4 +1,6 @@
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Paint;
 
 import javax.swing.JFrame;
 import java.awt.Font;
@@ -21,6 +23,7 @@ import javax.swing.AbstractListModel;
 
 import main.frame.HomePanel;
 import main.frame.LearningPanel;
+import main.frame.TransitionModel;
 import menu.MenuListModel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -29,9 +32,10 @@ import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 
 
-public class window {
+public class window extends JFrame{
 
 	private JFrame frame;
+	private TransitionModel display = TransitionModel.Home; 
 
 	/**
 	 * Launch the application.
@@ -62,7 +66,7 @@ public class window {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = this;
 	
 
 		frame.setBounds(100, 100, 900, 600);
@@ -74,7 +78,7 @@ public class window {
 		frame.getContentPane().add(splitPane);
 		
 		//main frame view
-		JPanel panel = new HomePanel();
+		JPanel panel = new HomePanel(display);
 		splitPane.setRightComponent(panel);
 		//Home パネルを変えると，レイアウトも変える必要がある
 		
@@ -89,6 +93,12 @@ public class window {
 		JList list = new JList();
 		list.setModel(new MenuListModel());
 		panel_1.add(list);
+		
+	}
+	
+	public void update(Graphics g){
+		super.update(g);
+		
 		
 	}
 }
