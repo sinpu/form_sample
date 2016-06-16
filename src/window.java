@@ -66,9 +66,11 @@ public class window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		
+		//menu & mainFrame
 		JSplitPane splitPane = new JSplitPane();
 		frame.getContentPane().add(splitPane);
 		
+		//main frame view
 		JPanel panel = new LearningPanel();
 		splitPane.setRightComponent(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
