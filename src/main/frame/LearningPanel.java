@@ -15,9 +15,11 @@ public class LearningPanel extends JPanel{
 	
 	public LearningPanel(){
 		super();
+		
+		makeView();
 	}
 
-	private void init(){
+	private void makeView(){
 		
 		JSplitPane splitPane_1 = new JSplitPane();
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
