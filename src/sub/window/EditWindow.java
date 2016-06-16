@@ -35,6 +35,10 @@ public class EditWindow {
 
 	private JFrame frame;
 	private JTextField txtHelloLearner;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
 
 	/**
 	 * Launch the application.
@@ -80,9 +84,14 @@ public class EditWindow {
 		//main frame view
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
-		
+		panel.setLayout(new GridLayout(2, 3, 0, 0));
+
 		//main view program
+		textField = new JTextField();
+		panel.add(textField);
+		textField.setColumns(10);
+		
+
 		txtHelloLearner = new JTextField();
 		txtHelloLearner.setFont(new Font("Dialog", Font.BOLD, 23));
 		txtHelloLearner.setHorizontalAlignment(SwingConstants.CENTER);
@@ -90,9 +99,21 @@ public class EditWindow {
 		panel.add(txtHelloLearner);
 		txtHelloLearner.setColumns(10);
 		
+		textField_2 = new JTextField();
+		panel.add(textField_2);
+		textField_2.setColumns(10);
+		
+		textField_1 = new JTextField();
+		panel.add(textField_1);
+		textField_1.setColumns(10);
+		
 		JButton btnNewButton = new JButton("Click Start!");
 		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 19));
 		panel.add(btnNewButton);
+		
+		textField_3 = new JTextField();
+		panel.add(textField_3);
+		textField_3.setColumns(10);
 		
 		
 		//menu view
