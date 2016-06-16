@@ -20,8 +20,10 @@ public class HomePanel extends JPanel implements ActionListener{
 	}
 	
 	public HomePanel(TransitionModel e){
-		display = e;
+		super();
 		
+		display = e;
+		makeView();
 	}
 	
 	private void makeView(){
