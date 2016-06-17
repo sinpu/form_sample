@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class HomePanel extends JPanel implements ActionListener{
+public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 
 	private TransitionModel display;
 	
@@ -68,5 +68,11 @@ public class HomePanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 		display = TransitionModel.Learning;
+	}
+
+	@Override
+	public void changePanel(Enum e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

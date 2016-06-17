@@ -11,7 +11,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
 
-public class LearningPanel extends JPanel{
+public class LearningPanel extends JPanel implements AbstractPanel{
 	
 	public LearningPanel(){
 		super();
@@ -61,5 +61,11 @@ public class LearningPanel extends JPanel{
 		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
 		this.add(btnNewButton);
 
+	}
+
+	@Override
+	public void changePanel(Enum e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
