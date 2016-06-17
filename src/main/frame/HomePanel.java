@@ -5,13 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 
-	private TransitionModel display;
+	private JFrame mainWindowPanelFrame;
 	
 	public HomePanel(){
 		super();
@@ -19,10 +20,10 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 		makeView();
 	}
 	
-	public HomePanel(TransitionModel e){
+	public HomePanel(JFrame mainFrame){
 		super();
 		
-		display = e;
+		mainWindowPanelFrame = mainFrame;
 		makeView();
 	}
 	
@@ -67,7 +68,6 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		display = TransitionModel.Learning;
 	}
 
 	@Override

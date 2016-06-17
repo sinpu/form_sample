@@ -35,7 +35,15 @@ import javax.swing.SwingConstants;
 public class window extends JFrame{
 
 	private JFrame frame;
+	
+	//switch 
 	private TransitionModel display = TransitionModel.Home; 
+	
+	//main frame parts
+	private JPanel home;
+	private JPanel learning;
+	
+	private JSplitPane splitPane;
 
 	/**
 	 * Launch the application.
@@ -74,17 +82,17 @@ public class window extends JFrame{
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		
 		//menu & mainFrame
-		JSplitPane splitPane = new JSplitPane();
+		splitPane = new JSplitPane();
 		frame.getContentPane().add(splitPane);
 		
 		//main frame view
-		JPanel panel = new HomePanel(display);
-		splitPane.setRightComponent(panel);
-		//Home パネルを変えると，レイアウトも変える必要がある
-		
-		//panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setLayout(new GridLayout(2, 3, 0, 0));
-		
+		home = new HomePanel(this);
+		splitPane.setRightComponent(home);		
+		home.setLayout(new GridLayout(2, 3, 0, 0));
+
+		learning = new LearningPanel(this);
+		learning.setLayout(new BoxLayout(learning, BoxLayout.Y_AXIS));
+
 		
 		//menu view
 		JPanel panel_1 = new JPanel();
@@ -99,6 +107,20 @@ public class window extends JFrame{
 	public void update(Graphics g){
 		super.update(g);
 		
+		System.out.println(display.toString());
+		
+		switch (display) {
+		case Home:
+			
+			break;
+
+		case Learning:
+			home = new LearningPanel();
+			home.setLayout(new BoxLayout(home, BoxLayout.Y_AXIS));
+			splitPane.setRightComponent(home);
+		default:
+			break;
+		}
 		
 	}
 }

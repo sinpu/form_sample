@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -13,12 +14,21 @@ import javax.swing.SwingConstants;
 
 public class LearningPanel extends JPanel implements AbstractPanel{
 	
+	private JFrame mainWindowPanelFrame;
+	
 	public LearningPanel(){
 		super();
 		
 		makeView();
 	}
 
+	public LearningPanel(JFrame mainFrame){
+		super();
+		
+		mainWindowPanelFrame = mainFrame;
+		makeView();
+	}
+	
 	private void makeView(){
 		
 		JSplitPane splitPane_1 = new JSplitPane();
@@ -66,6 +76,5 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 	@Override
 	public void changePanel(Enum e) {
 		// TODO Auto-generated method stub
-		
 	}
 }
