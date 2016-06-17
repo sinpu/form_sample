@@ -103,6 +103,7 @@ public class MainWindow extends JFrame{
 		
 	}
 	
+	//change display panel
 	public void changePanel(TransitionModel display){
 		
 		switch (display) {
