@@ -30,6 +30,7 @@ import javax.swing.SwingConstants;
 import menu.*;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import java.awt.FlowLayout;
 
 public class EditWindow {
 
@@ -84,36 +85,64 @@ public class EditWindow {
 		//main frame view
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
-		panel.setLayout(new GridLayout(2, 3, 0, 0));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		//main view program
-		textField = new JTextField();
-		panel.add(textField);
-		textField.setColumns(10);
+		JSplitPane splitPane_1 = new JSplitPane();
+		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panel.add(splitPane_1);		
+	
+		JLabel lblNewLabel = new JLabel("",new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
+		splitPane_1.setLeftComponent(lblNewLabel);
 		
-
-		txtHelloLearner = new JTextField();
-		txtHelloLearner.setFont(new Font("Dialog", Font.BOLD, 23));
-		txtHelloLearner.setHorizontalAlignment(SwingConstants.CENTER);
-		txtHelloLearner.setText("Hello　Learner！");
-		panel.add(txtHelloLearner);
-		txtHelloLearner.setColumns(10);
+		JPanel panel_2 = new JPanel();
+		splitPane_1.setRightComponent(panel_2);
+		panel_2.setLayout(new GridLayout(2, 4, 0, 0));
 		
-		textField_2 = new JTextField();
-		panel.add(textField_2);
-		textField_2.setColumns(10);
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("Answer00");
+		panel_2.add(rdbtnNewRadioButton);
 		
-		textField_1 = new JTextField();
-		panel.add(textField_1);
-		textField_1.setColumns(10);
+		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Answer01");
+		panel_2.add(rdbtnNewRadioButton_1);
 		
-		JButton btnNewButton = new JButton("Click Start!");
-		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 19));
-		panel.add(btnNewButton);
+		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Answer02");
+		panel_2.add(rdbtnNewRadioButton_2);
 		
-		textField_3 = new JTextField();
-		panel.add(textField_3);
-		textField_3.setColumns(10);
+		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Answer03");
+		panel_2.add(rdbtnNewRadioButton_3);
+		
+		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("Answer04");
+		panel_2.add(rdbtnNewRadioButton_4);
+		
+		JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("Answer05");
+		panel_2.add(rdbtnNewRadioButton_5);
+		
+		JRadioButton rdbtnNewRadioButton_6 = new JRadioButton("Answer06");
+		panel_2.add(rdbtnNewRadioButton_6);
+		
+		JRadioButton rdbtnNewRadioButton_7 = new JRadioButton("Answer07");
+		panel_2.add(rdbtnNewRadioButton_7);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
+		panel_3.setAlignmentX(Component.LEFT_ALIGNMENT);
+		panel.add(panel_3);
+		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 10));
+		
+		JButton btnNewButton = new JButton("Back");
+		panel_3.add(btnNewButton);
+		btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		
+		JButton btnNewButton1 = new JButton("Home");
+		panel_3.add(btnNewButton1);
+		btnNewButton1.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnNewButton1.setVerticalAlignment(SwingConstants.BOTTOM);
+				
+		JButton btnNewButton2 = new JButton("Answer");
+		panel_3.add(btnNewButton2);
+		btnNewButton2.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnNewButton2.setVerticalAlignment(SwingConstants.BOTTOM);
 		
 		
 		//menu view
