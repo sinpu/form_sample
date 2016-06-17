@@ -37,7 +37,7 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.add(splitPane_1);		
 	
-		JLabel lblNewLabel = new JLabel("Image Test",new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
+		JLabel lblNewLabel = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
 		splitPane_1.setLeftComponent(lblNewLabel);
 		
 		JPanel panel_2 = new JPanel();
