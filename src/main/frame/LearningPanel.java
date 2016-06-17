@@ -52,7 +52,7 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		
 		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Answer02");
 		panel_2.add(rdbtnNewRadioButton_2);
-		
+
 		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Answer03");
 		panel_2.add(rdbtnNewRadioButton_3);
 		
@@ -74,20 +74,20 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		this.add(panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 10));
 		
-		JButton btnNewButton = new JButton("Back");
-		panel_3.add(btnNewButton);
-		btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton backBtn = new JButton("Back");
+		panel_3.add(backBtn);
+		backBtn.setHorizontalAlignment(SwingConstants.RIGHT);
+		backBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		
-		JButton btnNewButton1 = new JButton("Home");
-		panel_3.add(btnNewButton1);
-		btnNewButton1.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnNewButton1.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton homeBtn = new JButton("Home");
+		panel_3.add(homeBtn);
+		homeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
+		homeBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 				
-		JButton btnNewButton2 = new JButton("Answer");
-		panel_3.add(btnNewButton2);
-		btnNewButton2.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnNewButton2.setVerticalAlignment(SwingConstants.BOTTOM);
+		JButton answerBtn = new JButton("Answer");
+		panel_3.add(answerBtn);
+		answerBtn.setHorizontalAlignment(SwingConstants.RIGHT);
+		answerBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		
 		
 	}
