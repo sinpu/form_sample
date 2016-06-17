@@ -3,6 +3,8 @@ package main.frame;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -14,9 +16,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
 
+import window.MainWindow;
+
 public class LearningPanel extends JPanel implements AbstractPanel{
 	
-	private JFrame mainWindowPanelFrame;
+	private MainWindow mainWindowPanelFrame;
 	
 	public LearningPanel(){
 		super();
@@ -24,7 +28,7 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		makeView();
 	}
 
-	public LearningPanel(JFrame mainFrame){
+	public LearningPanel(MainWindow mainFrame){
 		super();
 		
 		mainWindowPanelFrame = mainFrame;
@@ -83,6 +87,14 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		panel_3.add(homeBtn);
 		homeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		homeBtn.setVerticalAlignment(SwingConstants.BOTTOM);
+		homeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				changePanel(TransitionModel.Home);
+			}
+		});
 				
 		JButton answerBtn = new JButton("Answer");
 		panel_3.add(answerBtn);
@@ -95,5 +107,6 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 	@Override
 	public void changePanel(TransitionModel e) {
 		// TODO Auto-generated method stub
+		mainWindowPanelFrame.changePanel(e);
 	}
 }
