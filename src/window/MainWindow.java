@@ -1,3 +1,5 @@
+package window;
+
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Paint;
@@ -32,13 +34,10 @@ import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 
 
-public class window extends JFrame{
+public class MainWindow extends JFrame{
 
 	private JFrame frame;
-	
-	//switch 
-	private TransitionModel display = TransitionModel.Home; 
-	
+		
 	//main frame parts
 	private JPanel home;
 	private JPanel learning;
@@ -53,7 +52,7 @@ public class window extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window window = new window();
+					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,7 +65,7 @@ public class window extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public window() {
+	public MainWindow() {
 		initialize();
 	}
 
@@ -104,20 +103,15 @@ public class window extends JFrame{
 		
 	}
 	
-	public void update(Graphics g){
-		super.update(g);
-		
-		System.out.println(display.toString());
+	public void changePanel(TransitionModel display){
 		
 		switch (display) {
 		case Home:
-			
+			splitPane.setRightComponent(home);
 			break;
 
 		case Learning:
-			home = new LearningPanel();
-			home.setLayout(new BoxLayout(home, BoxLayout.Y_AXIS));
-			splitPane.setRightComponent(home);
+			splitPane.setRightComponent(learning);
 		default:
 			break;
 		}

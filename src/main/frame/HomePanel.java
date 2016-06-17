@@ -10,9 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import window.*;
+
 public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 
-	private JFrame mainWindowPanelFrame;
+	private MainWindow mainWindowPanelFrame;
 	
 	public HomePanel(){
 		super();
@@ -20,7 +22,7 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 		makeView();
 	}
 	
-	public HomePanel(JFrame mainFrame){
+	public HomePanel(MainWindow mainFrame){
 		super();
 		
 		mainWindowPanelFrame = mainFrame;
@@ -68,11 +70,12 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 	}
 	
 	public void actionPerformed(ActionEvent e){
+		changePanel(TransitionModel.Learning);
 	}
 
 	@Override
-	public void changePanel(Enum e) {
+	public void changePanel(TransitionModel e) {
 		// TODO Auto-generated method stub
-		
+		mainWindowPanelFrame.changePanel(e);
 	}
 }

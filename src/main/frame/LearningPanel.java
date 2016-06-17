@@ -66,15 +66,26 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		JRadioButton rdbtnNewRadioButton_7 = new JRadioButton("Answer07");
 		panel_2.add(rdbtnNewRadioButton_7);
 		
-		JButton btnNewButton = new JButton("New button");
+		JButton btnNewButton = new JButton("Back");
 		btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
 		this.add(btnNewButton);
 
+		JButton btnNewButton1 = new JButton("Home");
+		btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		this.add(btnNewButton);
+		
+		JButton btnNewButton2 = new JButton("Answer");
+		btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		this.add(btnNewButton);
+
+		
 	}
 
 	@Override
-	public void changePanel(Enum e) {
+	public void changePanel(TransitionModel e) {
 		// TODO Auto-generated method stub
 	}
 }
