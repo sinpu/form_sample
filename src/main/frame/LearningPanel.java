@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -16,6 +17,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
 
+import learningModel.ProblemModel;
+
 import window.MainWindow;
 
 public class LearningPanel extends JPanel implements AbstractPanel,ActionListener{
@@ -26,6 +29,9 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	//answer view
 	private JFrame answerWindow;
 	private JPanel answerImagePanel;
+	
+	//problem model
+	private ProblemModel problemData;
 	
 	private JLabel subjectLabel;
 	private JRadioButton[] rbAnswerButtons = new JRadioButton[8];
@@ -41,7 +47,9 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		super();
 		
 		mainWindowPanelFrame = mainFrame;
+		problemData = new ProblemModel();
 		makeView();
+		
 	}
 	
 	private void makeView(){
@@ -50,7 +58,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.add(splitPane_1);		
 	
-		subjectLabel = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
+		subjectLabel = new JLabel(new ImageIcon(problemData.getProblem()),JLabel.CENTER);
 		splitPane_1.setLeftComponent(subjectLabel);
 		
 		JPanel panel_2 = new JPanel();
@@ -80,6 +88,10 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		
 		rbAnswerButtons[7] = new JRadioButton("Answer07");
 		panel_2.add(rbAnswerButtons[7]);
+		
+		//set answer words
+		setAnswer();
+		
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -132,6 +144,16 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		answerBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		answerBtn.addActionListener(this);
 		
+	}
+	
+	private void setAnswer(){
+		ArrayList<String> answerList = problemData.getAnswer();
+		
+		int i = 0;
+		for(String answer : answerList){
+			rbAnswerButtons[i].setText(answer);
+			i++;
+		}
 	}
 
 	@Override
