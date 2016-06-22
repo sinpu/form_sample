@@ -18,9 +18,18 @@ import javax.swing.SwingConstants;
 
 import window.MainWindow;
 
-public class LearningPanel extends JPanel implements AbstractPanel{
+public class LearningPanel extends JPanel implements AbstractPanel,ActionListener{
 	
+	//main window
 	private MainWindow mainWindowPanelFrame;
+	
+	//answer view
+	private JFrame answerWindow;
+	private JPanel answerImagePanel;
+	
+	private JLabel subjectLabel;
+	private JRadioButton[] rbAnswerButtons = new JRadioButton[8];
+	
 	
 	public LearningPanel(){
 		super();
@@ -41,36 +50,36 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.add(splitPane_1);		
 	
-		JLabel lblNewLabel = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
-		splitPane_1.setLeftComponent(lblNewLabel);
+		subjectLabel = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
+		splitPane_1.setLeftComponent(subjectLabel);
 		
 		JPanel panel_2 = new JPanel();
 		splitPane_1.setRightComponent(panel_2);
 		panel_2.setLayout(new GridLayout(2, 4, 0, 0));
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Answer00");
-		panel_2.add(rdbtnNewRadioButton);
+		rbAnswerButtons[0] = new JRadioButton("Answer00");
+		panel_2.add(rbAnswerButtons[0]);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Answer01");
-		panel_2.add(rdbtnNewRadioButton_1);
+		rbAnswerButtons[1]= new JRadioButton("Answer01");
+		panel_2.add(rbAnswerButtons[1]);
 		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Answer02");
-		panel_2.add(rdbtnNewRadioButton_2);
+		rbAnswerButtons[2] = new JRadioButton("Answer02");
+		panel_2.add(rbAnswerButtons[2]);
 
-		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Answer03");
-		panel_2.add(rdbtnNewRadioButton_3);
+		rbAnswerButtons[3] = new JRadioButton("Answer03");
+		panel_2.add(rbAnswerButtons[3]);
 		
-		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("Answer04");
-		panel_2.add(rdbtnNewRadioButton_4);
+		rbAnswerButtons[4] = new JRadioButton("Answer04");
+		panel_2.add(rbAnswerButtons[4]);
 		
-		JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("Answer05");
-		panel_2.add(rdbtnNewRadioButton_5);
+		rbAnswerButtons[5] = new JRadioButton("Answer05");
+		panel_2.add(rbAnswerButtons[5]);
 		
-		JRadioButton rdbtnNewRadioButton_6 = new JRadioButton("Answer06");
-		panel_2.add(rdbtnNewRadioButton_6);
+		rbAnswerButtons[6] = new JRadioButton("Answer06");
+		panel_2.add(rbAnswerButtons[6]);
 		
-		JRadioButton rdbtnNewRadioButton_7 = new JRadioButton("Answer07");
-		panel_2.add(rdbtnNewRadioButton_7);
+		rbAnswerButtons[7] = new JRadioButton("Answer07");
+		panel_2.add(rbAnswerButtons[7]);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -83,7 +92,7 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		backBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		backBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		
-		JButton homeBtn = new JButton("Home");
+		JButton homeBtn = new JButton("AnswerCheck");
 		panel_3.add(homeBtn);
 		homeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		homeBtn.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -91,8 +100,29 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				changePanel(TransitionModel.Home);
+				// TODO Answer check & best Answer show
+				if(null == answerWindow){
+					answerWindow = new JFrame();
+					answerWindow.setBounds(1000, 100, 300, 600);
+					answerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
+					
+					answerImagePanel = new JPanel();
+					answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
+					answerWindow.add(answerImagePanel);
+					
+					//some answer need some JLavel
+					JLabel answerImage = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
+					answerImagePanel.add(answerImage);
+
+					JLabel answerImage2 = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
+					answerImagePanel.add(answerImage2);
+
+					
+					answerWindow.setVisible(true);
+				}else{
+					//for(String uri : model[]) answerImagePanel.add...
+				}
 			}
 		});
 				
@@ -100,7 +130,7 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 		panel_3.add(answerBtn);
 		answerBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		answerBtn.setVerticalAlignment(SwingConstants.BOTTOM);
-		
+		answerBtn.addActionListener(this);
 		
 	}
 
@@ -108,5 +138,13 @@ public class LearningPanel extends JPanel implements AbstractPanel{
 	public void changePanel(TransitionModel e) {
 		// TODO Auto-generated method stub
 		mainWindowPanelFrame.changePanel(e);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+		
+		
 	}
 }
