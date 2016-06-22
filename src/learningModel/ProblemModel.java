@@ -56,17 +56,19 @@ public class ProblemModel {
 				
 			}
 			
-			//debug
-			//checkString(problemsList.toArray());
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+
 		
+		//debug
+		//checkString(problemsList.toArray());
 		setProblemModel();
 	}
 	
 	public void setAnswer(){
+		answerList.clear();
+		
 		try{
 			FileReader fReader = new FileReader(new File(answerTextURI));
 			BufferedReader bReader = new BufferedReader(fReader);

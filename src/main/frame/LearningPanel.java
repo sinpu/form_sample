@@ -36,6 +36,8 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private JLabel subjectLabel;
 	private JRadioButton[] rbAnswerButtons = new JRadioButton[8];
 	
+	private String BACK_BUTTON_STRING = "Back";
+	private String NEXT_BUTTON_STRING = "Next";
 	
 	public LearningPanel(){
 		super();
@@ -99,10 +101,11 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		this.add(panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 10));
 		
-		JButton backBtn = new JButton("Back");
+		JButton backBtn = new JButton(BACK_BUTTON_STRING);
 		panel_3.add(backBtn);
 		backBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		backBtn.setVerticalAlignment(SwingConstants.BOTTOM);
+		backBtn.addActionListener(this);
 		
 		JButton homeBtn = new JButton("AnswerCheck");
 		panel_3.add(homeBtn);
@@ -138,7 +141,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			}
 		});
 				
-		JButton answerBtn = new JButton("Answer");
+		JButton answerBtn = new JButton(NEXT_BUTTON_STRING);
 		panel_3.add(answerBtn);
 		answerBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		answerBtn.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -155,6 +158,10 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			i++;
 		}
 	}
+	
+	private void setProblemImage(){
+		subjectLabel.setIcon(new ImageIcon(problemData.getProblem()));
+	}
 
 	@Override
 	public void changePanel(TransitionModel e) {
@@ -165,8 +172,15 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		String command = e.getActionCommand();
 		
+		if(command.equals(BACK_BUTTON_STRING)){
+			problemData.previosProblem();
+		}else if(command.equals(NEXT_BUTTON_STRING)){
+			problemData.nextProblem();
+		}		
 		
-		
+		setProblemImage();
+		setAnswer();
 	}
 }
