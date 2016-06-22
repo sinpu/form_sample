@@ -87,7 +87,7 @@ public class ProblemModel {
 		return problemImageURI;
 	}
 	
-	public ArrayList<String> getAnser(){
+	public ArrayList<String> getAnswer(){
 		return answerList;
 	}
 	

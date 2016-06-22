@@ -7,12 +7,14 @@ import javax.naming.InitialContext;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 
+import org.eclipse.ui.internal.handlers.WizardHandler.New;
+
 import main.frame.TransitionModel;
 
 public class MenuListModel extends DefaultListModel<Object> implements ActionListener{
 
 	// protected EventListenerList listenerList
-	private String[] list = {TransitionModel.Home.toString(),"PROPERTY","EXIT"};
+	//private String[] list = {TransitionModel.Home.toString(),"PROPERTY","EXIT"};
 	
 	public MenuListModel(){
 		super();
@@ -20,15 +22,15 @@ public class MenuListModel extends DefaultListModel<Object> implements ActionLis
 	}
 	
 	private void init(){
-		for(String data : list ){
-		this.addElement(data);
+		
+		for(TransitionModel data : TransitionModel.values() ){
+			this.addElement(data.toString());
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	
