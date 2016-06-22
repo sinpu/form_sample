@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JSplitPane;
 import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
+
 import java.awt.GridBagLayout;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -23,14 +25,21 @@ import javax.swing.JTextPane;
 import java.awt.Component;
 import javax.swing.AbstractListModel;
 
+import learningModel.LearnerModel;
 import main.frame.HomePanel;
 import main.frame.LearningPanel;
+import main.frame.LoginPanel;
 import main.frame.TransitionModel;
 import menu.MenuListModel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.SwingConstants;
 
 
@@ -41,9 +50,14 @@ public class MainWindow extends JFrame{
 	//main frame parts
 	private JPanel home;
 	private JPanel learning;
+	private JPanel login;
 	
 	private JSplitPane splitPane;
 
+	private LearnerModel learner;
+	
+	private JTextField idTextField;
+	private JTextField passTextField;
 	/**
 	 * Launch the application.
 	 */
@@ -80,11 +94,14 @@ public class MainWindow extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		
+		//login 
+		login = new LoginPanel(this);
+		frame.getContentPane().add(login);
+		
 		//menu & mainFrame
 		splitPane = new JSplitPane();
-		frame.getContentPane().add(splitPane);
 		
-		//main frame view
+		//main frame view		
 		home = new HomePanel(this);
 		splitPane.setRightComponent(home);		
 		home.setLayout(new GridLayout(2, 3, 0, 0));
@@ -103,6 +120,14 @@ public class MainWindow extends JFrame{
 		
 	}
 	
+	public void startSystem(String id,String pass){
+		learner = new LearnerModel(id, pass);
+		
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(splitPane);
+		frame.getContentPane().revalidate();
+	}
+	
 	//change display panel
 	public void changePanel(TransitionModel display){
 		
@@ -118,4 +143,5 @@ public class MainWindow extends JFrame{
 		}
 		
 	}
+	
 }
