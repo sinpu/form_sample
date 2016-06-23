@@ -30,8 +30,9 @@ import learningModel.LearnerModel;
 import main.frame.HomePanel;
 import main.frame.LearningPanel;
 import main.frame.LoginPanel;
-import main.frame.TransitionModel;
 import menu.MenuListModel;
+import menu.TransitionModel;
+
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -152,8 +153,10 @@ public class MainWindow extends JFrame{
 			splitPane.setRightComponent(home);
 			break;
 
-		case Learning:
-			splitPane.setRightComponent(learning);
+		case Record:
+			//splitPane.setRightComponent(learning);
+			break;
+			
 		default:
 			break;
 		}
