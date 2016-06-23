@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import menu.TransitionModel;
+
 import window.*;
 
 public class HomePanel extends JPanel implements ActionListener,AbstractPanel{

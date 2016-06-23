@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
 import window.MainWindow;
 
 import learningModel.LearnerModel;
+import menu.TransitionModel;
 
 public class LoginPanel extends JPanel implements AbstractPanel,ActionListener{
 	

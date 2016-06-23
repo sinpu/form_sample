@@ -11,7 +11,6 @@ import org.eclipse.ui.internal.handlers.WizardHandler.New;
 
 import window.MainWindow;
 
-import main.frame.TransitionModel;
 
 public class MenuListModel extends DefaultListModel<Object> implements ActionListener{
 

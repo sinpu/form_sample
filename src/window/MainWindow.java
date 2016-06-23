@@ -153,8 +153,8 @@ public class MainWindow extends JFrame{
 			splitPane.setRightComponent(home);
 			break;
 
-		case Record:
-			//splitPane.setRightComponent(learning);
+		case Learning:
+			splitPane.setRightComponent(learning);
 			break;
 			
 		default:

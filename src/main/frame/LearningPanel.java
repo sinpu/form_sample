@@ -18,13 +18,14 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
 
 import learningModel.ProblemModel;
+import menu.TransitionModel;
 
 import window.MainWindow;
 
 public class LearningPanel extends JPanel implements AbstractPanel,ActionListener{
 	
 	//main window
-	private MainWindow mainWindowPanelFrame;
+	private MainWindow mainWindow;
 	
 	//answer view
 	private JFrame answerWindow;
@@ -36,8 +37,11 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private JLabel subjectLabel;
 	private JRadioButton[] rbAnswerButtons = new JRadioButton[8];
 	
+	//button id
 	private String BACK_BUTTON_STRING = "Back";
 	private String NEXT_BUTTON_STRING = "Next";
+	private String CHECK_BUTTON_STRING = "Answer";
+	
 	
 	public LearningPanel(){
 		super();
@@ -48,7 +52,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	public LearningPanel(MainWindow mainFrame){
 		super();
 		
-		mainWindowPanelFrame = mainFrame;
+		mainWindow = mainFrame;
 		problemData = new ProblemModel();
 		makeView();
 		
@@ -107,39 +111,11 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		backBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		backBtn.addActionListener(this);
 		
-		JButton homeBtn = new JButton("AnswerCheck");
+		JButton homeBtn = new JButton(CHECK_BUTTON_STRING);
 		panel_3.add(homeBtn);
 		homeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		homeBtn.setVerticalAlignment(SwingConstants.BOTTOM);
-		homeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Answer check & best Answer show
-				if(null == answerWindow){
-					answerWindow = new JFrame();
-					answerWindow.setBounds(1000, 100, 300, 600);
-					answerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
-					
-					answerImagePanel = new JPanel();
-					answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
-					answerWindow.add(answerImagePanel);
-					
-					//some answer need some JLavel
-					JLabel answerImage = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
-					answerImagePanel.add(answerImage);
-
-					JLabel answerImage2 = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
-					answerImagePanel.add(answerImage2);
-
-					
-					answerWindow.setVisible(true);
-				}else{
-					//for(String uri : model[]) answerImagePanel.add...
-				}
-			}
-		});
+		homeBtn.addActionListener(this);
 				
 		JButton answerBtn = new JButton(NEXT_BUTTON_STRING);
 		panel_3.add(answerBtn);
@@ -166,7 +142,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	@Override
 	public void changePanel(TransitionModel e) {
 		// TODO Auto-generated method stub
-		mainWindowPanelFrame.changePanel(e);
+		mainWindow.changePanel(e);
 	}
 
 	@Override
@@ -176,11 +152,48 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		
 		if(command.equals(BACK_BUTTON_STRING)){
 			problemData.previosProblem();
+			setProblemImage();
+			setAnswer();  //汚いなぁ…
+			
+		}else if(command.equals(CHECK_BUTTON_STRING)){
+			checkAnswer();
+			
 		}else if(command.equals(NEXT_BUTTON_STRING)){
 			problemData.nextProblem();
+			setProblemImage();
+			setAnswer();
 		}		
+	}
+	
+	private void checkAnswer(){
 		
-		setProblemImage();
-		setAnswer();
+		showBestAnswer();
+		
+	}
+	
+	private void showBestAnswer(){
+		if(null == answerWindow){
+			answerWindow = new JFrame();
+			answerWindow.setBounds(1000, 100, 300, 600);
+			answerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
+			
+			answerImagePanel = new JPanel();
+			answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
+			answerWindow.add(answerImagePanel);
+			
+			//some answer need some JLavel
+			JLabel answerImage = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
+			answerImagePanel.add(answerImage);
+
+			JLabel answerImage2 = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
+			answerImagePanel.add(answerImage2);
+
+			
+			answerWindow.setVisible(true);
+		}else{
+			//for(String uri : model[]) answerImagePanel.add...
+		}
+		
 	}
 }
