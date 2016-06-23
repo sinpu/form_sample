@@ -31,6 +31,9 @@ import menu.*;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.FlowLayout;
+import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class EditWindow {
 
@@ -40,6 +43,8 @@ public class EditWindow {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
 
 	/**
 	 * Launch the application.
@@ -76,82 +81,43 @@ public class EditWindow {
 
 		frame.setBounds(100, 100, 900, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
+		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
-		//menu & mainFrame
-		JSplitPane splitPane = new JSplitPane();
-		frame.getContentPane().add(splitPane);
-		
-		//main frame view
 		JPanel panel = new JPanel();
-		splitPane.setRightComponent(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-		//main view program
-		JSplitPane splitPane_1 = new JSplitPane();
-		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panel.add(splitPane_1);		
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblLoginSys = new JLabel("LOGIN SYSTEM");
+		lblLoginSys.setFont(new Font("Dialog", Font.BOLD, 35));
+		lblLoginSys.setBounds(281, 128, 436, 71);
+		lblLoginSys.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblLoginSys);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(530, 270, 114, 19);
+		textField_4.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(textField_4);
+		textField_4.setColumns(10);
+		
+		textField_5 = new JTextField();
+		textField_5.setBounds(530, 360, 114, 19);
+		panel.add(textField_5);
+		textField_5.setColumns(10);
+		
+		JLabel lblId = new JLabel("ID");
+		lblId.setBounds(420, 270, 70, 15);
+		panel.add(lblId);
+		
+		JLabel lblPass = new JLabel("PASS");
+		lblPass.setBounds(420, 360, 70, 15);
+		panel.add(lblPass);
+		
+		JButton btnLogin = new JButton("LOGIN");
+		btnLogin.setBounds(465, 430, 117, 25);
+		panel.add(btnLogin);
+		
 	
-		JLabel lblNewLabel = new JLabel("",new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"),JLabel.CENTER);
-		splitPane_1.setLeftComponent(lblNewLabel);
 		
-		JPanel panel_2 = new JPanel();
-		splitPane_1.setRightComponent(panel_2);
-		panel_2.setLayout(new GridLayout(2, 4, 0, 0));
-		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Answer00");
-		panel_2.add(rdbtnNewRadioButton);
-		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Answer01");
-		panel_2.add(rdbtnNewRadioButton_1);
-		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Answer02");
-		panel_2.add(rdbtnNewRadioButton_2);
-		
-		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Answer03");
-		panel_2.add(rdbtnNewRadioButton_3);
-		
-		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("Answer04");
-		panel_2.add(rdbtnNewRadioButton_4);
-		
-		JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("Answer05");
-		panel_2.add(rdbtnNewRadioButton_5);
-		
-		JRadioButton rdbtnNewRadioButton_6 = new JRadioButton("Answer06");
-		panel_2.add(rdbtnNewRadioButton_6);
-		
-		JRadioButton rdbtnNewRadioButton_7 = new JRadioButton("Answer07");
-		panel_2.add(rdbtnNewRadioButton_7);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setAlignmentY(Component.TOP_ALIGNMENT);
-		panel_3.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panel.add(panel_3);
-		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 10));
-		
-		JButton btnNewButton = new JButton("Back");
-		panel_3.add(btnNewButton);
-		btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnNewButton.setVerticalAlignment(SwingConstants.BOTTOM);
-		
-		JButton btnNewButton1 = new JButton("Home");
-		panel_3.add(btnNewButton1);
-		btnNewButton1.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnNewButton1.setVerticalAlignment(SwingConstants.BOTTOM);
-				
-		JButton btnNewButton2 = new JButton("Answer");
-		panel_3.add(btnNewButton2);
-		btnNewButton2.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnNewButton2.setVerticalAlignment(SwingConstants.BOTTOM);
-		
-		
-		//menu view
-		JPanel panel_1 = new JPanel();
-		splitPane.setLeftComponent(panel_1);
-		
-		JList list = new JList();
-		list.setModel(new MenuListModel());
-		panel_1.add(list);
 		
 	}
 }
