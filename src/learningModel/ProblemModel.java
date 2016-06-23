@@ -95,11 +95,15 @@ public class ProblemModel {
 	
 	public void nextProblem(){
 		indexOfProblem++;
+		if( (problemsList.size() - 1 )< indexOfProblem) indexOfProblem = 0;
 		setProblemModel();
 	}
 	
 	public void previosProblem(){
 		indexOfProblem--;
+		
+		if(indexOfProblem < 0) indexOfProblem = problemsList.size() - 1;
+		
 		setProblemModel();
 	}
 	
