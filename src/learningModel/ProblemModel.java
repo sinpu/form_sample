@@ -53,18 +53,19 @@ public class ProblemModel {
 	
 	public ProblemModel(){
 		String tmpString = "";
-		
+		String listString = "";
 		indexOfProblem = 0;
 		
 		try{
 			FileReader fReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_LIST_FILE));
 			BufferedReader bReader = new BufferedReader(fReader);
-			
+
 			while( (tmpString = bReader.readLine()) != null){
-				//problemsList.add(tmpString);
-				
+				listString = tmpString;
 			}
-			String[] problem = tmpString.split(",");
+
+			String[] problem = listString.split(",");
+			
 			
 			for(String tmp : problem){
 				problemsList.add(tmp);
@@ -74,10 +75,9 @@ public class ProblemModel {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
 		
 		//debug
-		//checkString(problemsList.toArray());
+		checkString(problemsList.toArray());
 		setProblemModel("problem");
 	}
 	
@@ -85,8 +85,12 @@ public class ProblemModel {
 		return problemImageURI;
 	}
 	
-	public ArrayList<AnswerModel> getAnswer(){
-		return answerList;
+	public ArrayList<String> getAnswer(){
+		ArrayList<String> arrayList = new ArrayList<String>();
+		for(AnswerModel data : answerList){
+			arrayList.add(data.getAnswer());
+		}
+		return arrayList;
 	}
 	
 	public void nextProblem(){
@@ -108,14 +112,14 @@ public class ProblemModel {
 		answerList.clear();
 		
 		try{
-			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE + mainProblem + "/" + mainProblem +".csv"));
+			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE +"/"+ mainProblem + "/" + mainProblem +".csv"));
 			BufferedReader bReader = new BufferedReader(fileReader);
 
 			char[] check = new char[SUB_PROBLEM_MAX];
 			while( (tmpString = bReader.readLine()) != null){
 				String[] answerData = tmpString.split(",");
 				
-				if(answerData[0].contains(".")) problemImageURI = answerData[0];
+				if(answerData[0].contains(".")) problemImageURI = SYSTEM_PASS + PROBLEM_TYPE +"/"+ mainProblem + "/" +answerData[0];
 				
 				for(int i = 3 ,j = 0 ; i < answerData.length ; i++,j++){
 					check[j] = answerData[i].charAt(0);

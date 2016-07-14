@@ -1,13 +1,19 @@
 package learningModel;
 
 public class AnswerModel {
-	String answer;
-	char check;
-	char[] diagnostic = new char[24];
+	private String answer;
+	private char check;
+	private char[] diagnostic = new char[24];
 	
 	AnswerModel(String answer, char check, char[] diagnostic){
 		this.answer = answer;
 		this.check = check;
 		this.diagnostic = diagnostic;
 	}
+	
+	public String getAnswer(){
+		return answer;
+	}
+	
+	
 }
