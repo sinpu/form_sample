@@ -14,9 +14,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.SwingConstants;
 
+import learningModel.AnswerModel;
 import learningModel.ProblemModel;
 import menu.TransitionModel;
 
@@ -152,43 +155,50 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		
 		if(command.equals(BACK_BUTTON_STRING)){
 			problemData.previosProblem();
-			setProblemImage();
-			setAnswer();  //汚いなぁ…
 			
 		}else if(command.equals(CHECK_BUTTON_STRING)){
 			checkAnswer();
 			
 		}else if(command.equals(NEXT_BUTTON_STRING)){
 			problemData.nextProblem();
-			setProblemImage();
-			setAnswer();
 		}		
+		
+		setProblemImage();
+		setAnswer();
 	}
 	
 	private void checkAnswer(){
+		char[] answer = new char[8];
 		
-		showBestAnswer();
+		for(int i = 0 ; i < rbAnswerButtons.length ; i++){
+			if(rbAnswerButtons[i].isSelected()) answer[i] = '1';
+			else answer[i] = '0'; 
+		}
 		
+		if( problemData.checkAnswer(answer) ) showBestAnswer() ;
 	}
 	
 	private void showBestAnswer(){
 		if(null == answerWindow){
 			answerWindow = new JFrame();
-			answerWindow.setBounds(1000, 100, 300, 600);
+			answerWindow.setBounds(1000, 100, 900, 600);
 			answerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
 			
 			answerImagePanel = new JPanel();
 			answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
-			answerWindow.add(answerImagePanel);
+			//answerWindow.add(answerImagePanel);
+
+			JScrollPane scrollPane = new JScrollPane(answerImagePanel);
+			answerWindow.add(scrollPane);
 			
-			//some answer need some JLavel
-			JLabel answerImage = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
-			answerImagePanel.add(answerImage);
+			
+			for(String kyojiURI : problemData.getKyojiURIlist()){
 
-			JLabel answerImage2 = new JLabel(new ImageIcon("/home/sinpu/ダウンロード/kadai02.png"));
-			answerImagePanel.add(answerImage2);
+				//some answer need some JLavel
+				answerImagePanel.add( new JLabel(new ImageIcon( kyojiURI ) ));
 
+			}
 			
 			answerWindow.setVisible(true);
 		}else{

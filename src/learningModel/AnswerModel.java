@@ -15,5 +15,12 @@ public class AnswerModel {
 		return answer;
 	}
 	
+	public char getCheckAnswer(){
+		return check;
+	}
+	
+	public char[] getSubList(){
+		return diagnostic;
+	}
 	
 }
