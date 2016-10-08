@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -111,6 +112,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		
 	}
 	
+	/* Button Setting */
 	private void btnSetting(JPanel panel){
 		for(int i = 0 ; i < ANSWER_SIZE ; i++){
 			rbAnswerButtons[i] = new JRadioButton("Answer0" + i);
@@ -121,17 +123,31 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		}
 	}
 	
+	/* set Answer */
 	private void setAnswer(){
 		ArrayList<String> answerList = problemData.getAnswer();
 		
-		int i = 0;
-		for(String answer : answerList){
-			rbAnswerButtons[i].setText(answer);
-			rbAnswerButtons[i].setSelected(false);
-			i++;
+		for(int i = 0 ; i < ANSWER_SIZE ; i++){
+			rbAnswerButtons[i].setText("");
+			rbAnswerButtons[i].setVisible(true);
+		}
+
+		Random rand = new Random();
+		int tmp = 0;
+		int t = 0;
+		for(int i = ANSWER_SIZE ; i > 0 ; i--){
+			tmp = rand.nextInt(i);
+			t = i - 1;
+			rbAnswerButtons[t].setText(answerList.get(tmp));
+			answerList.remove(tmp);
+			rbAnswerButtons[t].setSelected(false);
+			if(rbAnswerButtons[t].getText().equals("-1")){
+				rbAnswerButtons[t].setVisible(false);
+			}
 		}
 	}
 	
+	/* set Image of Problem */
 	private void setProblemImage(){
 		subjectLabel.setIcon(new ImageIcon(problemData.getProblem()));
 	}
@@ -161,6 +177,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		setAnswer();
 	}
 	
+	/* Grading Answer */
 	private void checkAnswer(){
 		char[] answer = new char[8];
 		
@@ -172,6 +189,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		if( problemData.checkAnswer(answer) ) showBestAnswer() ;
 	}
 	
+	/*  */
 	private void showBestAnswer(){
 		if(null == answerWindow || !answerWindow.isShowing()){
 			answerWindow = new JFrame();
