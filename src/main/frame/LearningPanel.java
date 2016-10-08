@@ -2,12 +2,14 @@ package main.frame;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -36,9 +38,9 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	
 	//problem model
 	private ProblemModel problemData;
-	
+	private static final int ANSWER_SIZE = 8;	
 	private JLabel subjectLabel;
-	private JRadioButton[] rbAnswerButtons = new JRadioButton[8];
+	private JRadioButton[] rbAnswerButtons = new JRadioButton[ANSWER_SIZE];
 	
 	//button id
 	private String BACK_BUTTON_STRING = "Back";
@@ -61,6 +63,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		
 	}
 	
+	/* learning Display */
 	private void makeView(){
 		
 		JSplitPane splitPane_1 = new JSplitPane();
@@ -73,32 +76,10 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		JPanel panel_2 = new JPanel();
 		splitPane_1.setRightComponent(panel_2);
 		panel_2.setLayout(new GridLayout(2, 4, 0, 0));
+				
 		
-		rbAnswerButtons[0] = new JRadioButton("Answer00");
-		panel_2.add(rbAnswerButtons[0]);
-		
-		rbAnswerButtons[1]= new JRadioButton("Answer01");
-		panel_2.add(rbAnswerButtons[1]);
-		
-		rbAnswerButtons[2] = new JRadioButton("Answer02");
-		panel_2.add(rbAnswerButtons[2]);
-
-		rbAnswerButtons[3] = new JRadioButton("Answer03");
-		panel_2.add(rbAnswerButtons[3]);
-		
-		rbAnswerButtons[4] = new JRadioButton("Answer04");
-		panel_2.add(rbAnswerButtons[4]);
-		
-		rbAnswerButtons[5] = new JRadioButton("Answer05");
-		panel_2.add(rbAnswerButtons[5]);
-		
-		rbAnswerButtons[6] = new JRadioButton("Answer06");
-		panel_2.add(rbAnswerButtons[6]);
-		
-		rbAnswerButtons[7] = new JRadioButton("Answer07");
-		panel_2.add(rbAnswerButtons[7]);
-		
-		//set answer words
+		//set answer
+		btnSetting(panel_2);
 		setAnswer();
 		
 		
@@ -113,6 +94,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		backBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		backBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		backBtn.addActionListener(this);
+		backBtn.setVisible(false);
 		
 		JButton homeBtn = new JButton(CHECK_BUTTON_STRING);
 		panel_3.add(homeBtn);
@@ -125,7 +107,18 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		answerBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		answerBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		answerBtn.addActionListener(this);
+		answerBtn.setVisible(false);
 		
+	}
+	
+	private void btnSetting(JPanel panel){
+		for(int i = 0 ; i < ANSWER_SIZE ; i++){
+			rbAnswerButtons[i] = new JRadioButton("Answer0" + i);
+			panel.add(rbAnswerButtons[i]);
+			
+			rbAnswerButtons[i].setFont(new Font("Arial BOLD ITALIC",Font.PLAIN,20));
+			
+		}
 	}
 	
 	private void setAnswer(){
@@ -134,6 +127,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		int i = 0;
 		for(String answer : answerList){
 			rbAnswerButtons[i].setText(answer);
+			rbAnswerButtons[i].setSelected(false);
 			i++;
 		}
 	}
@@ -179,10 +173,10 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	}
 	
 	private void showBestAnswer(){
-		if(null == answerWindow){
+		if(null == answerWindow || !answerWindow.isShowing()){
 			answerWindow = new JFrame();
 			answerWindow.setBounds(1000, 100, 900, 600);
-			answerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			answerWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
 			
 			answerImagePanel = new JPanel();
