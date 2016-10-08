@@ -1,5 +1,6 @@
 package main.frame;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,24 +39,37 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 		JTextField textField = new JTextField();
 		this.add(textField);
 		textField.setColumns(10);
+		textField.setEditable(false);
+		textField.setBorder(null);
+		textField.setBackground(Color.WHITE);
+		
 
 		//main text
 		JTextField txtHelloLearner = new JTextField();
+		this.add(txtHelloLearner);
 		txtHelloLearner.setFont(new Font("Dialog", Font.BOLD, 23));
 		txtHelloLearner.setHorizontalAlignment(SwingConstants.CENTER);
 		txtHelloLearner.setText("Hello　Learner！");
-		this.add(txtHelloLearner);
 		txtHelloLearner.setColumns(10);
+		txtHelloLearner.setEditable(false);
+		txtHelloLearner.setBorder(null);
+		txtHelloLearner.setBackground(Color.WHITE);
 		
 		//empty part 2
 		JTextField textField_2 = new JTextField();
 		this.add(textField_2);
 		textField_2.setColumns(10);
+		textField_2.setEditable(false);
+		textField_2.setBorder(null);
+		textField_2.setBackground(Color.WHITE);
 		
 		//empty part 3
 		JTextField textField_1 = new JTextField();
 		this.add(textField_1);
 		textField_1.setColumns(10);
+		textField_1.setEditable(false);
+		textField_1.setBorder(null);
+		textField_1.setBackground(Color.WHITE);
 		
 		//start button
 		JButton btnNewButton = new JButton("Click Start!");
@@ -67,6 +81,10 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 		JTextField textField_3 = new JTextField();
 		this.add(textField_3);
 		textField_3.setColumns(10);
+		textField_3.setEditable(false);
+		textField_3.setBorder(null);
+		textField_3.setBackground(Color.WHITE);
+
 
 
 	}
