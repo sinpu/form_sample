@@ -105,14 +105,17 @@ public class MainWindow extends JFrame{
 		//menu & mainFrame
 		splitPane = new JSplitPane();
 		
-		//main frame view		
+		//main frame view
+		/* home */
 		home = new HomePanel(this);
 		splitPane.setRightComponent(home);		
 		home.setLayout(new GridLayout(2, 3, 0, 0));
 
+		/* learning */
 		learning = new LearningPanel(this);
 		learning.setLayout(new BoxLayout(learning, BoxLayout.Y_AXIS));
-
+		
+		/* record */
 		
 		//menu view
 		JPanel panel_1 = new JPanel();
@@ -137,6 +140,7 @@ public class MainWindow extends JFrame{
 		*/
 	}
 	
+	/* 使ってないね */
 	public void startSystem(String id,String pass){
 		learner = new LearnerModel(id, pass);
 		
@@ -154,6 +158,8 @@ public class MainWindow extends JFrame{
 			break;
 
 		case Learning:
+			learning = new LearningPanel(this);
+			learning.setLayout(new BoxLayout(learning, BoxLayout.Y_AXIS));
 			splitPane.setRightComponent(learning);
 			break;
 			

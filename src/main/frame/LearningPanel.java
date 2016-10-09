@@ -1,5 +1,6 @@
 package main.frame;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -48,6 +49,11 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private String NEXT_BUTTON_STRING = "Next";
 	private String CHECK_BUTTON_STRING = "Answer";
 	
+	//button
+	private JButton nextBtn;
+	private JButton checkBtn;
+	private JButton backBtn;
+	
 	
 	public LearningPanel(){
 		super();
@@ -59,9 +65,17 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		super();
 		
 		mainWindow = mainFrame;
-		problemData = new ProblemModel();
+		start();
 		makeView();
-		
+	}
+	
+	private void start(){
+		if(null == problemData){
+			problemData = new ProblemModel();		
+		}else{
+			problemData.saveLearningData();
+			problemData = new ProblemModel();
+		}
 	}
 	
 	/* learning Display */
@@ -90,25 +104,25 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		this.add(panel_3);
 		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 10));
 		
-		JButton backBtn = new JButton(BACK_BUTTON_STRING);
+		backBtn = new JButton(BACK_BUTTON_STRING);
 		panel_3.add(backBtn);
 		backBtn.setHorizontalAlignment(SwingConstants.RIGHT);
 		backBtn.setVerticalAlignment(SwingConstants.BOTTOM);
 		backBtn.addActionListener(this);
 		backBtn.setVisible(false);
 		
-		JButton homeBtn = new JButton(CHECK_BUTTON_STRING);
-		panel_3.add(homeBtn);
-		homeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
-		homeBtn.setVerticalAlignment(SwingConstants.BOTTOM);
-		homeBtn.addActionListener(this);
+		checkBtn = new JButton(CHECK_BUTTON_STRING);
+		panel_3.add(checkBtn);
+		checkBtn.setHorizontalAlignment(SwingConstants.RIGHT);
+		checkBtn.setVerticalAlignment(SwingConstants.BOTTOM);
+		checkBtn.addActionListener(this);
 				
-		JButton answerBtn = new JButton(NEXT_BUTTON_STRING);
-		panel_3.add(answerBtn);
-		answerBtn.setHorizontalAlignment(SwingConstants.RIGHT);
-		answerBtn.setVerticalAlignment(SwingConstants.BOTTOM);
-		answerBtn.addActionListener(this);
-		answerBtn.setVisible(false);
+		nextBtn = new JButton(NEXT_BUTTON_STRING);
+		panel_3.add(nextBtn);
+		nextBtn.setHorizontalAlignment(SwingConstants.RIGHT);
+		nextBtn.setVerticalAlignment(SwingConstants.BOTTOM);
+		nextBtn.addActionListener(this);
+		nextBtn.setVisible(false);
 		
 	}
 	
@@ -130,6 +144,8 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		for(int i = 0 ; i < ANSWER_SIZE ; i++){
 			rbAnswerButtons[i].setText("");
 			rbAnswerButtons[i].setVisible(true);
+			rbAnswerButtons[i].setSelected(false);
+			rbAnswerButtons[i].setBackground(null);
 		}
 
 		Random rand = new Random();
@@ -140,7 +156,6 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			t = i - 1;
 			rbAnswerButtons[t].setText(answerList.get(tmp));
 			answerList.remove(tmp);
-			rbAnswerButtons[t].setSelected(false);
 			if(rbAnswerButtons[t].getText().equals("-1")){
 				rbAnswerButtons[t].setVisible(false);
 			}
@@ -158,6 +173,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		mainWindow.changePanel(e);
 	}
 
+	/* Push Answer Button */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -170,27 +186,43 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			checkAnswer();
 			
 		}else if(command.equals(NEXT_BUTTON_STRING)){
-			problemData.nextProblem();
+			nextBtn.setVisible(false);
+			checkBtn.setEnabled(true);
+			/* finish movement */
+			if(!problemData.nextProblem()) {
+				changePanel(TransitionModel.Home);
+				return ;
+			}
+			setProblemImage();
+			setAnswer();
 		}		
 		
-		setProblemImage();
-		setAnswer();
 	}
 	
 	/* Grading Answer */
 	private void checkAnswer(){
-		char[] answer = new char[8];
 		
 		for(int i = 0 ; i < rbAnswerButtons.length ; i++){
-			if(rbAnswerButtons[i].isSelected()) answer[i] = '1';
-			else answer[i] = '0'; 
+			if(rbAnswerButtons[i].isSelected()){
+				if( problemData.checkProblemAnswer(rbAnswerButtons[i].getText())){
+					rbAnswerButtons[i].setBackground(Color.BLUE);
+				}else{
+					rbAnswerButtons[i].setBackground(Color.RED);
+				}
+			}			
 		}
 		
-		if( problemData.checkAnswer(answer) ) showBestAnswer() ;
+		problemData.setSubProblem();
+		showBestAnswer();
+		nextBtn.setVisible(true);
+		checkBtn.setEnabled(false);
 	}
 	
 	/*  */
 	private void showBestAnswer(){
+		ArrayList<String> tmpList = problemData.getKyojiURIlist();
+		if(tmpList.isEmpty()) return;
+		
 		if(null == answerWindow || !answerWindow.isShowing()){
 			answerWindow = new JFrame();
 			answerWindow.setBounds(1000, 100, 900, 600);

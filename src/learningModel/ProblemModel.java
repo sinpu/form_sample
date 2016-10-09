@@ -27,12 +27,15 @@ import com.ibm.icu.text.UTF16;
 public class ProblemModel {
 
 	//select answer
-	//private Map<String, Integer> answerList = new Map<String, Integer>();
-	private ArrayList<AnswerModel> answerList = new ArrayList<AnswerModel>();
+	private HashMap<String,AnswerModel> answerMap = new HashMap<String,AnswerModel>();
+	private ArrayList<String> answerList = new ArrayList<String>(); 
+	 /* 大問題のURIリスト */
 	private ArrayList<String> problemsList = new ArrayList<String>();
+	 /* 少問題のURIリスト */
 	private ArrayList<String> subProblemList = new ArrayList<String>();
-	private ArrayList<String> kyojiList = new ArrayList<String>();
-	private ArrayList<String> checkSubProblemList = new ArrayList<String>();
+	 /* 教示カードのURIリスト */
+	private ArrayList<String> kyojiList = new ArrayList<String>(); 
+	private ArrayList<String> checkProblemList = new ArrayList<String>();
 	private ArrayList<String> giveKyojiList = new ArrayList<String>();
 	
 	//problem
@@ -55,16 +58,25 @@ public class ProblemModel {
 	private int ANSWER_FILE_INDEX = 1;
 	
 	private int indexOfProblem;
-	private int indexOfSubProblem = 99;
+	private int index = 99;
+	private int now = 0;
+	private boolean killFrag;
 	
+	public static final int SUB_PROBLEM_MAX = 24;
+	int[] subCheckList = new int[SUB_PROBLEM_MAX];
+
 	
-	private int SUB_PROBLEM_MAX = 24;
+	/* debug */
+	ArrayList<Object> checkArrayList = new ArrayList<Object>();
 	
 	
 	public ProblemModel(){
 		String tmpString = "";
 		String listString = "";
 		indexOfProblem = 0;
+		index = 0;
+		killFrag = true;
+		resetSubCheckList();
 		
 		// set problem list
 		try{
@@ -82,6 +94,7 @@ public class ProblemModel {
 				problemsList.add(tmp);
 			}
 			focusProblem = problemsList.get(PROBLEM_FILE_INDEX);
+			checkProblemList.add(focusProblem);
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -115,7 +128,7 @@ public class ProblemModel {
 		
 		/* debug */
 		//checkString(kyojiList.toArray());
-		setProblem( MAIN );
+		setProblem( MAIN ,focusProblem);
 	}
 	
 	public String getProblem(){
@@ -128,172 +141,183 @@ public class ProblemModel {
 
 	
 	public ArrayList<String> getAnswer(){
-		ArrayList<String> arrayList = new ArrayList<String>();
-		for(AnswerModel data : answerList){
-			arrayList.add(data.getAnswer());
-		}
-		return arrayList;
+		return answerList;
 	}
 	
-	public void nextProblem(){
-		String problemType = "";
+	/* 学習記録の出力 */
+	public void saveLearningData(){
 		
-		if( checkSubProblemList.isEmpty()){
+	}
+	
+	public boolean nextProblem(){
+		String problemType = SUB;
+
+		killProblem();
+		resetSubCheckList();
+		
+		if(checkProblemList.isEmpty()) {
 			indexOfProblem++;
-			focusProblem = problemsList.get(indexOfProblem);
-			problemType = MAIN;
-		}else{
-			focusProblem = checkSubProblemList.get(indexOfSubProblem);
-			problemType = SUB;
+			index = 0;
+			/* finish condition */
+			if(indexOfProblem == problemsList.size()) return false; 
+			checkProblemList.add(problemsList.get(indexOfProblem));
 		}
 		
-		/* debug */
-		checkString(giveKyojiList.toArray());
+		now = index;
+		if( now >= checkProblemList.size()) now = checkProblemList.size() -1;
+		focusProblem = checkProblemList.get(now);
+		System.out.println("now :" + focusProblem + ":" + index);
 		
-		setProblem(problemType);
+		index--;
+		if(index < 0) index = checkProblemList.size() -1;
+		if(discrimeTypeMAIN()) problemType = MAIN;
+
+		for(String name : checkProblemList){
+			System.out.println(name);
+		}
+		
+		setProblem(problemType,focusProblem);
+		return true;
 	}
 	
-	public void previosProblem(){
-		//indexOfProblem--;
-		
+	/* 使ってないね */
+	public void previosProblem(){		
 		if(indexOfProblem < 0) indexOfProblem = problemsList.size() - 1;
-		
-		//setProblemModel();
 	}
 	
-	private void checkProblemAnswer(char[] answer){
-		int i = 0, j = 0;
-		char[][] subCheckList = new char[answer.length][SUB_PROBLEM_MAX];
-
+	/* main problem answer check method */
+	public boolean checkProblemAnswer(String answer){
+		if("".equals(answer)) return false;
 		
-		for(i = 0; i < answer.length ; i++){
-			for(j = 0 ; j < SUB_PROBLEM_MAX ; j++){
-				subCheckList[i][j] = '0'; 
+		AnswerModel answerModel = answerMap.get(answer);
+		boolean check = answerModel.getCheckAnswer();
+		if(!check){ //wrong
+			int[] value = answerModel.getSubList();
+			for(int i = 0; i < SUB_PROBLEM_MAX; i++){
+				subCheckList[i] += value[i];
 			}
+			killFrag = false;
 		}
 		
-		i = 0;
-		for(AnswerModel answerModel : answerList){
-			int ans = Character.getNumericValue(answerModel.getCheckAnswer()) + Character.getNumericValue(answer[i]);
+		return check;
+	}
+	
+	private void killProblem(){
+		if(killFrag) checkProblemList.remove(now);
+		killFrag = true;
+	}
+	
+	private void resetSubCheckList(){
+		for(int i = 0 ; i < SUB_PROBLEM_MAX ; i++){
+			subCheckList[i] = 0; 
+		}
+	}
+	
+	/*  */
+	private boolean contaionString(String uri,ArrayList<String> list){
+		boolean stillFlag = false;
+		
+		for(String URI : list){
+			if(URI.equals(uri)) stillFlag = true;
+		}
+		
+		return stillFlag;
+	}
+	
+	/* discrimination problem type */
+	public boolean discrimeTypeMAIN(){
+		if(focusProblem.contains( MAIN )) return true;
+		
+		return false;
+	}
+	
+	public void setSubProblem(){
+		if(!discrimeTypeMAIN()) return ;
+		
+		int[] point = checkSubProblem();
+		for(int i = 0 ; i < 3 ; i++){
+			if(subCheckList[point[i]] == 0) continue;
+			String tmpURI = subProblemList.get(point[i]);
+			if(!contaionString(tmpURI, checkProblemList)){
+				checkProblemList.add(tmpURI);
+			}
+			setProblem(SUB ,tmpURI);
+			makeKyojiList();
 			
-			switch(ans){
-				case 0:
-					break;
-					
-				case 1:
-					j = 0;
-					for(char value : answerModel.getSubList()){
-						subCheckList[i][j] = value;
-						j++;
-					}
-					break;
-					
-				case 2:
-					break;
-					
-				default:
-					break;
-			}
-			i++;
+			System.out.println(giveKyojiList.size() +":"+ tmpURI);
 		}
-		
-		for(i = 1 ; i < answer.length ; i++){
-			for(j = 0 ; j < SUB_PROBLEM_MAX ; j++){
-				subCheckList[0][j] += Character.getNumericValue(subCheckList[i][j]);
-			}
-		}
-		
-		
-		for(i = 0 ; i < SUB_PROBLEM_MAX ; i++){
-			if( Character.getNumericValue(subCheckList[0][i]) > 0) checkSubProblemList.add(subProblemList.get(i));
-		}
-
-		indexOfSubProblem = checkSubProblemList.size() -1;
+		index = checkProblemList.size() -1 ;
 	}
 	
-	public void checkSubAnswer(char[] answer){
-		int i = 0;
-		boolean killFlag = true;
-		
-		for(AnswerModel answerModel : answerList){
-			int ans = Character.getNumericValue(answerModel.getCheckAnswer()) + Character.getNumericValue(answer[i]);
-			
-			switch(ans){
-				case 0:
-					break;
-					
-				case 1:
-					giveKyojiList.add(kyojiImageURI);
-					killFlag = false;
-					break;
-					
-				case 2:
-					break;
-					
-				default:
-					break;
+	private int[] checkSubProblem(){
+		int[] n = { 0, 0, 0};
+		int[] k = { 0, 0, 0};
+		for(int i = 0 ; i < SUB_PROBLEM_MAX ; i++){
+			if( subCheckList[i] > n[0] ){
+				n[0] = subCheckList[i];
+				k[0] = i;
+				continue;
 			}
-			i++;
+			if( subCheckList[i] > n[1] ){
+				n[1] = subCheckList[i];
+				k[1] = i;
+				continue;
+			}
+			if( subCheckList[i] > n[2] ){
+				n[2] = subCheckList[i];
+				k[2] = i;
+				continue;
+			}			
 		}
-		
-		if(!killFlag) checkSubProblemList.remove(indexOfSubProblem);
-			
-		indexOfSubProblem--;
+		return k;
 	}
 	
-	public boolean checkAnswer(char[] answer){
-		boolean kyojiFlag = false;
-		
-		if(focusProblem.contains( MAIN )){
-			checkProblemAnswer(answer);
-		} else {
-			checkSubAnswer(answer);
+	private void makeKyojiList(){
+		/* まだ要らない
+		 *  giveKyojiList.clear();
+		 */
+		String[] tmp = kyojiImageURI.split("<>");
+		for(String kyoji : tmp){
+			String kyojiURI = SYSTEM_PASS + KYOJI + "/" + kyoji;
+			if( !contaionString(kyojiURI,giveKyojiList) )giveKyojiList.add(kyojiURI);
 		}
-		/* debug */
-		//checkString(checkSubProblemList.toArray());
-		nextProblem();
-		
-		if(indexOfSubProblem == 0) kyojiFlag = true;
-		
-		return kyojiFlag;
 	}
 	
-	private void setProblem(String PROBLEM_TYPE){
+	/* import Problem and setting Selections */
+	private void setProblem(String PROBLEM_TYPE, String fileName){
 		String tmpString = "";
+		answerMap.clear();
 		answerList.clear();
 		
 		try{
-			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE + "/" + focusProblem + "/" + focusProblem +".csv"));
+			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE + "/" + fileName + "/" + fileName +".csv"));
 			BufferedReader bReader = new BufferedReader(fileReader);
 
 			char[] check = new char[SUB_PROBLEM_MAX];
 			while( (tmpString = bReader.readLine()) != null){
 				String[] answerData = tmpString.split(",");
 				
-				if(answerData[0].contains(PROBLEM_TYPE)) problemImageURI = SYSTEM_PASS + PROBLEM_TYPE + "/" + focusProblem + "/" + answerData[0];
-				if(answerData[0].contains(KYOJI)) kyojiImageURI = SYSTEM_PASS + KYOJI + "/" + answerData[0];
+				if(answerData[0].contains(PROBLEM_TYPE)) problemImageURI = SYSTEM_PASS + PROBLEM_TYPE + "/" + fileName + "/" + answerData[0];
+				if(answerData[0].contains(KYOJI)) kyojiImageURI =  answerData[0];
 				
 				for(int i = 3 ,j = 0 ; i < answerData.length ; i++,j++){
 					check[j] = answerData[i].charAt(0);
 				}
 				
-				answerList.add(new AnswerModel(answerData[1],answerData[2].charAt(0),check) );
+				answerMap.put(answerData[1],new AnswerModel(answerData[1],answerData[2].charAt(0),check) );
+				answerList.add(answerData[1]);
 			}
 						
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-
-		
-		//debug
-		//problemsList.add(problemImageURI);
-		//checkString(checkArrayObjects);
 	}
 	
+	/* デバッグ用メソッド */
 	private void checkString(Object[] tmp){
 		JFrame answerWindow = new JFrame();
 		answerWindow.setBounds(1000, 100, 300, 600);
-		answerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		answerWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
 		
 		JPanel answerImagePanel = new JPanel();
