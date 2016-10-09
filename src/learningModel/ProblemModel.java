@@ -47,7 +47,7 @@ public class ProblemModel {
 	//answer
 	private String[] answerImageURI = new String[8];
 
-	private String SYSTEM_PASS = "/home/sinpu/learning_system/";
+	private String SYSTEM_PASS = "src/learning_system/";
 	private String PROBLEM_LIST_FILE = "problem.csv";
 	private String SUB_PROBLEM_LIST_FILE = "subkyoji.csv";
 	private String MAIN = "problem";
