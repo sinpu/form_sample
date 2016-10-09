@@ -43,11 +43,13 @@ public class LoginPanel extends JPanel implements AbstractPanel,ActionListener{
 		idTextField.setBounds(530, 270, 114, 19);
 		this.add(idTextField);
 		idTextField.setColumns(10);
+		//idTextField.setText(mainWindow.getUser().getID());
 		
 		passTextField = new JTextField();
 		passTextField.setBounds(530, 360, 114, 19);
 		this.add(passTextField);
 		passTextField.setColumns(10);
+		//passTextField.setText(mainWindow.getUser().getPASS());
 		
 		JLabel lblId = new JLabel("ID");
 		lblId.setBounds(420, 270, 70, 15);

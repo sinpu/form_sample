@@ -43,13 +43,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Date;
 
 import javax.swing.SwingConstants;
 
 
-public class MainWindow extends JFrame{
+public class MainWindow extends JFrame implements WindowListener{
 
 	private JFrame frame;
+	
+	/* User Data */
+	private LearnerModel user;
 		
 	//main frame parts
 	private JPanel home;
@@ -58,10 +62,6 @@ public class MainWindow extends JFrame{
 	
 	private JSplitPane splitPane;
 
-	private LearnerModel learner;
-	
-	private JTextField idTextField;
-	private JTextField passTextField;
 	/**
 	 * Launch the application.
 	 */
@@ -84,7 +84,13 @@ public class MainWindow extends JFrame{
 	 * Create the application.
 	 */
 	public MainWindow() {
-		initialize();
+		user = new LearnerModel(System.getProperty("user.name"),"0000", "1111");
+
+		initialize();		
+	}
+	
+	public LearnerModel getUser(){
+		return user;
 	}
 
 	/**
@@ -95,7 +101,8 @@ public class MainWindow extends JFrame{
 	
 
 		frame.setBounds(100, 100, 900, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(this);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		
 		//login 
@@ -142,7 +149,6 @@ public class MainWindow extends JFrame{
 	
 	/* 使ってないね */
 	public void startSystem(String id,String pass){
-		learner = new LearnerModel(id, pass);
 		
 		frame.getContentPane().removeAll();
 		frame.getContentPane().add(splitPane);
@@ -168,5 +174,61 @@ public class MainWindow extends JFrame{
 		}
 		
 	}
+
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		user.setEndTime();
+		System.out.println(user.getStartTime().toString());
+		System.out.println(user.getEndTime().toString());
+		System.out.println(user.reqStudyTime());	
+
+		System.exit(EXIT_ON_CLOSE);
+	}
+
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		/* Closed にてExitを行ったら終了せんかった… */
+	}
+
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 }
