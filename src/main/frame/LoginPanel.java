@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -45,7 +46,7 @@ public class LoginPanel extends JPanel implements AbstractPanel,ActionListener{
 		idTextField.setColumns(10);
 		//idTextField.setText(mainWindow.getUser().getID());
 		
-		passTextField = new JTextField();
+		passTextField = new JPasswordField();
 		passTextField.setBounds(530, 360, 114, 19);
 		this.add(passTextField);
 		passTextField.setColumns(10);
