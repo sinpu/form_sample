@@ -54,6 +54,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private JButton checkBtn;
 	private JButton backBtn;
 	
+	public String problemSize = "";
 	
 	public LearningPanel(){
 		super();
@@ -195,6 +196,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			}
 			setProblemImage();
 			setAnswer();
+			updateProblemSize();
 		}		
 		
 	}
@@ -249,5 +251,13 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			//for(String uri : model[]) answerImagePanel.add...
 		}
 		
+	}
+	
+	public void updateProblemSize(){
+		StringBuffer problemSize = new StringBuffer();
+		problemSize.append("Left:");
+		problemSize.append(problemData.getProblemLength());
+
+		mainWindow.updateSize(problemSize.toString());
 	}
 }

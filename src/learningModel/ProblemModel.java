@@ -87,7 +87,7 @@ public class ProblemModel {
 				listString = tmpString;
 			}
 
-			String[] problem = listString.split(",");
+			String[] problem = listString.split("\t");
 			
 			
 			for(String tmp : problem){
@@ -112,12 +112,12 @@ public class ProblemModel {
 				i++;
 			}
 			
-			String[] data = dataString[3].split(",");
+			String[] data = dataString[3].split("\t");
 			for(String tmp : data){
 				subProblemList.add(tmp);
 			}
 			
-			data = dataString[4].split(",");
+			data = dataString[4].split("\t");
 			for(String tmp : data){
 				kyojiList.add(tmp);
 			}
@@ -129,6 +129,14 @@ public class ProblemModel {
 		/* debug */
 		//checkString(kyojiList.toArray());
 		setProblem( MAIN ,focusProblem);
+	}
+	
+	public int getProblemLength(){
+		return (checkProblemList.size() + problemsList.size());
+	}
+	
+	public int getProblemIndex(){
+		return index;
 	}
 	
 	public String getProblem(){
@@ -295,7 +303,7 @@ public class ProblemModel {
 
 			char[] check = new char[SUB_PROBLEM_MAX];
 			while( (tmpString = bReader.readLine()) != null){
-				String[] answerData = tmpString.split(",");
+				String[] answerData = tmpString.split("\t");
 				
 				if(answerData[0].contains(PROBLEM_TYPE)) problemImageURI = SYSTEM_PASS + PROBLEM_TYPE + "/" + fileName + "/" + answerData[0];
 				if(answerData[0].contains(KYOJI)) kyojiImageURI =  answerData[0];

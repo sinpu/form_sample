@@ -2,8 +2,10 @@ package window;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Paint;
+import java.awt.TextField;
 
 import javax.swing.JFrame;
 import java.awt.Font;
@@ -61,6 +63,7 @@ public class MainWindow extends JFrame implements WindowListener{
 	private JPanel login;
 	
 	private JSplitPane splitPane;
+	private JTextField problemSize;
 
 	/**
 	 * Launch the application.
@@ -139,6 +142,20 @@ public class MainWindow extends JFrame implements WindowListener{
 			panel_1.add(menuBtn[i]);
 			i++;
 		}
+		JPanel space = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) space.getLayout();
+		flowLayout.setVgap(200);
+		panel_1.add(space);
+		
+		problemSize = new JTextField();
+		panel_1.add(problemSize);
+		problemSize.setEditable(false);
+		problemSize.setBackground(null);
+		problemSize.setBorder(null);
+		problemSize.setFont(new Font("Dialog", Font.ITALIC, 33));
+		problemSize.setHorizontalAlignment(JTextField.CENTER);
+		problemSize.setText("");
+
 		
 		/* 使って見たが、listenerが理想的ではない
 		JList list = new JList();
@@ -173,6 +190,10 @@ public class MainWindow extends JFrame implements WindowListener{
 			break;
 		}
 		
+	}
+	
+	public void updateSize(String data){
+		problemSize.setText(data);
 	}
 
 
