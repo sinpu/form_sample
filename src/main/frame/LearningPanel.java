@@ -54,6 +54,9 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private JButton checkBtn;
 	private JButton backBtn;
 	
+	private ImageIcon right = new ImageIcon("src/learning_system/image/right_answer.png");
+	private ImageIcon wrong = new ImageIcon("src/learning_system/image/wrong_answer.png");
+	
 	public String problemSize = "";
 	
 	public LearningPanel(){
@@ -136,6 +139,8 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			rbAnswerButtons[i].setFont(new Font("Arial BOLD ITALIC",Font.PLAIN,20));
 			
 		}
+		
+		
 	}
 	
 	/* set Answer */
@@ -147,6 +152,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			rbAnswerButtons[i].setVisible(true);
 			rbAnswerButtons[i].setSelected(false);
 			rbAnswerButtons[i].setBackground(null);
+			rbAnswerButtons[i].setIcon(null);
 		}
 
 		Random rand = new Random();
@@ -207,9 +213,11 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		for(int i = 0 ; i < rbAnswerButtons.length ; i++){
 			if(rbAnswerButtons[i].isSelected()){
 				if( problemData.checkProblemAnswer(rbAnswerButtons[i].getText())){
-					rbAnswerButtons[i].setBackground(Color.BLUE);
+					rbAnswerButtons[i].setBackground(Color.CYAN);
+					rbAnswerButtons[i].setIcon(right);
 				}else{
-					rbAnswerButtons[i].setBackground(Color.RED);
+					rbAnswerButtons[i].setBackground(Color.ORANGE);
+					rbAnswerButtons[i].setIcon(wrong);
 				}
 			}			
 		}
