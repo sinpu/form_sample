@@ -55,7 +55,7 @@ public class MainWindow extends JFrame implements WindowListener{
 	private JFrame frame;
 	
 	/* User Data */
-	private LearnerModel user;
+	public LearnerModel user;
 		
 	//main frame parts
 	private JPanel home;
@@ -210,8 +210,10 @@ public class MainWindow extends JFrame implements WindowListener{
 		user.setEndTime();
 		System.out.println(user.getStartTime().toString());
 		System.out.println(user.getEndTime().toString());
-		System.out.println(user.reqStudyTime());	
-
+		System.out.println(user.reqStudyTime());
+		
+		System.out.println(user.getDataToString());
+		
 		System.exit(EXIT_ON_CLOSE);
 	}
 

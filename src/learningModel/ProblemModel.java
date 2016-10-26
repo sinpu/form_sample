@@ -152,6 +152,10 @@ public class ProblemModel {
 		return answerList;
 	}
 	
+	public String getProblemName(){
+		return focusProblem;
+	}
+	
 	/* 学習記録の出力 */
 	public void saveLearningData(){
 		
@@ -174,15 +178,17 @@ public class ProblemModel {
 		now = index;
 		if( now >= checkProblemList.size()) now = checkProblemList.size() -1;
 		focusProblem = checkProblemList.get(now);
-		System.out.println("now :" + focusProblem + ":" + index);
+		//System.out.println("now :" + focusProblem + ":" + index);
 		
 		index--;
 		if(index < 0) index = checkProblemList.size() -1;
 		if(discrimeTypeMAIN()) problemType = MAIN;
 
+		/* 検証用
 		for(String name : checkProblemList){
 			System.out.println(name);
 		}
+		*/
 		
 		setProblem(problemType,focusProblem);
 		return true;

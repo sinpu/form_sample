@@ -209,10 +209,13 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	
 	/* Grading Answer */
 	private void checkAnswer(){
+		ArrayList<String> ansList = new ArrayList<String>();
 		
 		for(int i = 0 ; i < rbAnswerButtons.length ; i++){
 			if(rbAnswerButtons[i].isSelected()){
-				if( problemData.checkProblemAnswer(rbAnswerButtons[i].getText())){
+				String answer = rbAnswerButtons[i].getText();
+				ansList.add(answer);
+				if( problemData.checkProblemAnswer( answer )){
 					rbAnswerButtons[i].setBackground(Color.CYAN);
 					rbAnswerButtons[i].setIcon(right);
 				}else{
@@ -222,6 +225,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			}			
 		}
 		
+		mainWindow.user.setRecord(problemData.getProblemName(), ansList);
 		problemData.setSubProblem();
 		showBestAnswer();
 		nextBtn.setVisible(true);

@@ -2,6 +2,7 @@ package learningModel;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import com.ibm.icu.util.Calendar;
 
 public class LearnerModel {
 	
-	private HashMap<String, Boolean> recodeMap = new HashMap<String, Boolean>();
+	private HashMap<String, ArrayList<String>> recodeMap = new HashMap<String, ArrayList<String>>();
 	
 	private String name;
 	private String id;
@@ -84,10 +85,37 @@ public class LearnerModel {
 		return true;
 	}
 	
-	private void setRecord(){
-		
+	public void setRecord(String problemName, ArrayList<String> answerList){
+		recodeMap.put(problemName, answerList);
 	}
 	
+	public String getDataToString(){
+		StringBuffer dataBuffer = new StringBuffer();
+		
+		dataBuffer.append("name::");
+		dataBuffer.append( getName() );
+		dataBuffer.append("\t");
+
+		dataBuffer.append("id::");
+		dataBuffer.append( getID() );
+		dataBuffer.append("\t");
+		
+		dataBuffer.append("***Record***");
+		dataBuffer.append("\t");
+		for(String key : recodeMap.keySet()){
+			dataBuffer.append( key );
+			dataBuffer.append("::");
+			ArrayList<String> ansList = recodeMap.get( key );
+			for(String answer : ansList){
+				dataBuffer.append( answer );
+				dataBuffer.append(",");
+			}
+			dataBuffer.lastIndexOf(",");
+			dataBuffer.append("\t");
+		}
+		
+		return dataBuffer.toString();
+	}
 	
 	
 
