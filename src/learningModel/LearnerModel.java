@@ -110,7 +110,8 @@ public class LearnerModel {
 				dataBuffer.append( answer );
 				dataBuffer.append(",");
 			}
-			dataBuffer.lastIndexOf(",");
+			int index = dataBuffer.lastIndexOf(",");
+			dataBuffer.deleteCharAt( index );
 			dataBuffer.append("\t");
 		}
 		

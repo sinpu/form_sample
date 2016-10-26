@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JList;
 import javax.swing.JButton;
@@ -164,8 +165,9 @@ public class MainWindow extends JFrame implements WindowListener{
 		*/
 	}
 	
-	/* 使ってないね */
+	/* login後呼ばれる関数 */
 	public void startSystem(String id,String pass){
+		user.setID(id);
 		
 		frame.getContentPane().removeAll();
 		frame.getContentPane().add(splitPane);
@@ -196,6 +198,18 @@ public class MainWindow extends JFrame implements WindowListener{
 		problemSize.setText(data);
 	}
 
+	private boolean showFinishDialog(){
+		String[] selects = { "Exit" , "Return" };
+		
+		int ans = JOptionPane.showOptionDialog(this, "Exit System?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, selects, selects[1]);
+		
+		
+		if( ans == 0 ){
+			return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {
@@ -208,13 +222,16 @@ public class MainWindow extends JFrame implements WindowListener{
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
 		user.setEndTime();
-		System.out.println(user.getStartTime().toString());
-		System.out.println(user.getEndTime().toString());
-		System.out.println(user.reqStudyTime());
 		
-		System.out.println(user.getDataToString());
-		
-		System.exit(EXIT_ON_CLOSE);
+		if( showFinishDialog() ){
+			System.out.println(user.getStartTime().toString());
+			System.out.println(user.getEndTime().toString());
+			System.out.println(user.reqStudyTime());
+			
+			System.out.println(user.getDataToString());
+
+			System.exit(EXIT_ON_CLOSE);
+		}
 	}
 
 
@@ -223,7 +240,6 @@ public class MainWindow extends JFrame implements WindowListener{
 		// TODO Auto-generated method stub
 		/* Closed にてExitを行ったら終了せんかった… */
 	}
-
 
 	@Override
 	public void windowIconified(WindowEvent e) {

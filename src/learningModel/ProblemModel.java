@@ -258,7 +258,7 @@ public class ProblemModel {
 			setProblem(SUB ,tmpURI);
 			makeKyojiList();
 			
-			System.out.println(giveKyojiList.size() +":"+ tmpURI);
+			//System.out.println(giveKyojiList.size() +":"+ tmpURI);
 		}
 		index = checkProblemList.size() -1 ;
 	}
