@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -50,15 +51,18 @@ public class LoginPanel extends JPanel implements AbstractPanel,ActionListener{
 		passTextField.setBounds(530, 360, 114, 19);
 		this.add(passTextField);
 		passTextField.setColumns(10);
-		//passTextField.setText(mainWindow.getUser().getPASS());
+		passTextField.setText(mainWindow.getUser().getPASS());
+		passTextField.setVisible(false);
 		
-		JLabel lblId = new JLabel("ID");
-		lblId.setBounds(420, 270, 70, 15);
+		JLabel lblId = new JLabel("School ID");
+		lblId.setBounds(400, 270, 150, 15);
 		this.add(lblId);
+		lblId.setFont(new Font("Arial BOLD ITALIC",Font.PLAIN,20));
 		
 		JLabel lblPass = new JLabel("PASS");
-		lblPass.setBounds(420, 360, 70, 15);
+		lblPass.setBounds(420, 360, 70, 20);
 		this.add(lblPass);
+		lblPass.setVisible(false);
 		
 		JButton btnLogin = new JButton("LOGIN");
 		btnLogin.setBounds(465, 430, 117, 25);
@@ -72,8 +76,45 @@ public class LoginPanel extends JPanel implements AbstractPanel,ActionListener{
 		String id = idTextField.getText();
 		String pass = passTextField.getText();
 		
-		mainWindow.startSystem(id, pass);
+		if(null == id || "".equals(id) ){
+			JOptionPane.showMessageDialog(mainWindow, "Please Input School ID !!");
+		}
+		
+		if(checkID(id)){
+			mainWindow.startSystem(id, pass);
+		}else{
+			JOptionPane.showMessageDialog(mainWindow, "Please Input Right School ID !!");
+		}
 	}
+	
+	private boolean checkID(String SID){		
+		String id = SID.toLowerCase();
+		
+		char[] parts = id.toCharArray();
+		
+		if( parts.length != 7){
+			return false;
+		}
+		
+		if( parts[0] != 'a' && parts[0] != 'm'){
+			return false;
+		}
+		
+		if( parts[1] != 'l' && parts[1] != 'a'){
+			return false;
+		}
+
+		if( parts[2] != '1' ){
+			return false;
+		}
+		
+		if( parts[3] != '5' && parts[3] != '6'){
+			return false;
+		}		
+		
+		return true;
+	}
+	
 
 	@Override
 	public void changePanel(TransitionModel e) {
