@@ -110,7 +110,19 @@ public class LoginPanel extends JPanel implements AbstractPanel,ActionListener{
 		
 		if( parts[3] != '5' && parts[3] != '6'){
 			return false;
-		}		
+		}
+		
+		if( parts[4] != '0' && parts[4] != '0'){
+			return false;
+		}
+		
+		if( 47 < parts[5] && parts[5] < 58){
+			return false;
+		}
+		
+		if( 47 < parts[6] && parts[6] < 58){
+			return false;
+		}
 		
 		return true;
 	}
