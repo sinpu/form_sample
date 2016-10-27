@@ -90,7 +90,7 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		changePanel(TransitionModel.Learning);
+		changePanel(TransitionModel.Subject);
 	}
 
 	@Override

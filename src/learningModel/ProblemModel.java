@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import menu.TransitionModel;
+
 import org.eclipse.core.internal.runtime.Log;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.ui.internal.handlers.WizardHandler.New;
@@ -94,7 +96,7 @@ public class ProblemModel {
 				problemsList.add(tmp);
 			}
 			focusProblem = problemsList.get(PROBLEM_FILE_INDEX);
-			checkProblemList.add(focusProblem);
+			//checkProblemList.add(focusProblem);
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -131,8 +133,10 @@ public class ProblemModel {
 		setProblem( MAIN ,focusProblem);
 	}
 	
-	public int getProblemLength(){
-		return (checkProblemList.size() + problemsList.size());
+	public int getProblemLength( TransitionModel t ){
+		if( t == TransitionModel.Subject ) return checkProblemList.size();
+		
+		return (checkProblemList.size() + problemsList.size() - indexOfProblem - 1);
 	}
 	
 	public int getProblemIndex(){
@@ -161,13 +165,15 @@ public class ProblemModel {
 		
 	}
 	
-	public boolean nextProblem(){
+	public boolean nextProblem( TransitionModel t ){
 		String problemType = SUB;
 
 		killProblem();
 		resetSubCheckList();
 		
-		if(checkProblemList.isEmpty()) {
+		if( checkProblemList.isEmpty() ) {
+			if(t == TransitionModel.Subject) return false;
+			
 			indexOfProblem++;
 			index = 0;
 			/* finish condition */
@@ -178,17 +184,10 @@ public class ProblemModel {
 		now = index;
 		if( now >= checkProblemList.size()) now = checkProblemList.size() -1;
 		focusProblem = checkProblemList.get(now);
-		//System.out.println("now :" + focusProblem + ":" + index);
 		
 		index--;
 		if(index < 0) index = checkProblemList.size() -1;
 		if(discrimeTypeMAIN()) problemType = MAIN;
-
-		/* 検証用
-		for(String name : checkProblemList){
-			System.out.println(name);
-		}
-		*/
 		
 		setProblem(problemType,focusProblem);
 		return true;
@@ -253,7 +252,7 @@ public class ProblemModel {
 			if(subCheckList[point[i]] == 0) continue;
 			String tmpURI = subProblemList.get(point[i]);
 			if(!contaionString(tmpURI, checkProblemList)){
-				checkProblemList.add(tmpURI);
+				checkProblemList.add( 1, tmpURI);
 			}
 			setProblem(SUB ,tmpURI);
 			makeKyojiList();
@@ -303,6 +302,7 @@ public class ProblemModel {
 		answerMap.clear();
 		answerList.clear();
 		
+		
 		try{
 			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE + "/" + fileName + "/" + fileName +".csv"));
 			BufferedReader bReader = new BufferedReader(fileReader);
@@ -327,50 +327,14 @@ public class ProblemModel {
 		}
 	}
 	
-	/* デバッグ用メソッド */
-	private void checkString(Object[] tmp){
-		JFrame answerWindow = new JFrame();
-		answerWindow.setBounds(1000, 100, 300, 600);
-		answerWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
-		
-		JPanel answerImagePanel = new JPanel();
-		answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
-		answerWindow.add(answerImagePanel);
-		
-		//some answer need some JLavel
-		JTextArea textArea = new JTextArea();
-		answerImagePanel.add(textArea);
-		
-		StringBuffer tString = new StringBuffer();
-		for(Object data : tmp){
-			tString.append(data.toString());
-			tString.append("\n");
-		}
-		textArea.setText(tString.toString());
-		
-		answerWindow.setVisible(true);
-
+	public void startStudy(String problemName ){
+		if( "problem01".equals(problemName) ) indexOfProblem = 0;
+		checkProblemList.add( problemName );
+		setProblem(MAIN, problemName);
 	}
 	
-	/*
-	public void setAnswer(){
-		answerList.clear();
-		
-		try{
-			FileReader fReader = new FileReader(new File(answerTextURI));
-			BufferedReader bReader = new BufferedReader(fReader);
-			
-			String tmpString = "";
-			while( (tmpString = bReader.readLine()) != null){
-				answerList.add(tmpString);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		//debug
-		//checkString(answerList.toArray());
+	
+	public void resetCheckList(){
+		checkProblemList.clear();
 	}
-	*/
 }

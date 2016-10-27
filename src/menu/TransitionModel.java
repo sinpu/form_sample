@@ -2,7 +2,8 @@ package menu;
 
 public enum TransitionModel {
 	Home,
-	Learning,
+	Subject,
+	Study,
 	Record,
 	Exit;
 }

@@ -33,6 +33,7 @@ import learningModel.LearnerModel;
 import main.frame.HomePanel;
 import main.frame.LearningPanel;
 import main.frame.LoginPanel;
+import main.frame.SelectProblemPanel;
 import menu.MenuListModel;
 import menu.TransitionModel;
 
@@ -60,8 +61,9 @@ public class MainWindow extends JFrame implements WindowListener{
 		
 	//main frame parts
 	private JPanel home;
-	private JPanel learning;
+	private SelectProblemPanel select;
 	private JPanel login;
+	private LearningPanel study;
 	
 	private JSplitPane splitPane;
 	private JTextField problemSize;
@@ -123,8 +125,9 @@ public class MainWindow extends JFrame implements WindowListener{
 		home.setLayout(new GridLayout(2, 3, 0, 0));
 
 		/* learning */
-		learning = new LearningPanel(this);
-		learning.setLayout(new BoxLayout(learning, BoxLayout.Y_AXIS));
+		select = new SelectProblemPanel(this);
+		study = new LearningPanel(this);
+		study.setLayout(new BoxLayout(study, BoxLayout.Y_AXIS));
 		
 		/* record */
 		
@@ -182,10 +185,31 @@ public class MainWindow extends JFrame implements WindowListener{
 			splitPane.setRightComponent(home);
 			break;
 
-		case Learning:
-			learning = new LearningPanel(this);
-			learning.setLayout(new BoxLayout(learning, BoxLayout.Y_AXIS));
-			splitPane.setRightComponent(learning);
+		case Subject:
+			splitPane.setRightComponent(select);
+			break;
+
+		case Study:
+			if( select.getSelection().isEmpty() ){
+				study.setStudyType(TransitionModel.Study);
+				study.start("problem01");
+			}else{
+				study.setStudyType(TransitionModel.Subject);
+				study.start(select.getSelection());
+				select.resetSelection();
+			}
+			splitPane.setRightComponent(study);
+			break;
+			
+		case Record:
+			JOptionPane.showMessageDialog(this, "Comming Soon!");
+			break;
+			
+		case Exit:
+			if( showFinishDialog() ){
+				recordData();
+				System.exit(0);
+			}
 			break;
 			
 		default:
@@ -194,8 +218,18 @@ public class MainWindow extends JFrame implements WindowListener{
 		
 	}
 	
+	private void recordData(){
+		user.setEndTime();
+
+		System.out.println(user.getStartTime().toString());
+		System.out.println(user.getEndTime().toString());
+		System.out.println(user.reqStudyTime());
+		
+		System.out.println(user.getDataToString());
+	}
+	
 	public void updateSize(String data){
-		problemSize.setText(data);
+		problemSize.setText(data);		
 	}
 
 	private boolean showFinishDialog(){
@@ -221,15 +255,9 @@ public class MainWindow extends JFrame implements WindowListener{
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		user.setEndTime();
 		
 		if( showFinishDialog() ){
-			System.out.println(user.getStartTime().toString());
-			System.out.println(user.getEndTime().toString());
-			System.out.println(user.reqStudyTime());
-			
-			System.out.println(user.getDataToString());
-
+			recordData();
 			System.exit(EXIT_ON_CLOSE);
 		}
 	}
@@ -238,7 +266,8 @@ public class MainWindow extends JFrame implements WindowListener{
 	@Override
 	public void windowClosed(WindowEvent e) {
 		// TODO Auto-generated method stub
-		/* Closed にてExitを行ったら終了せんかった… */
+		/* Closed にてExitを行ったら終了せんかった…  disposeの結果で終了するときらしい*/
+		recordData();
 	}
 
 	@Override

@@ -57,6 +57,8 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private ImageIcon right = new ImageIcon("src/learning_system/image/right_answer.png");
 	private ImageIcon wrong = new ImageIcon("src/learning_system/image/wrong_answer.png");
 	
+	private TransitionModel studyType;
+	
 	public String problemSize = "";
 	
 	public LearningPanel(){
@@ -69,17 +71,17 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		super();
 		
 		mainWindow = mainFrame;
-		start();
+		problemData = new ProblemModel();
 		makeView();
 	}
 	
-	private void start(){
-		if(null == problemData){
-			problemData = new ProblemModel();		
-		}else{
-			problemData.saveLearningData();
-			problemData = new ProblemModel();
-		}
+	public void start(String startProblem){
+		problemData.resetCheckList();
+		problemData.startStudy( startProblem );
+	
+		setProblemImage();
+		setAnswer();
+		updateProblemSize();
 	}
 	
 	/* learning Display */
@@ -196,7 +198,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			nextBtn.setVisible(false);
 			checkBtn.setEnabled(true);
 			/* finish movement */
-			if(!problemData.nextProblem()) {
+			if(!problemData.nextProblem( studyType )) {
 				changePanel(TransitionModel.Home);
 				return ;
 			}
@@ -265,10 +267,18 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		
 	}
 	
+	public void setStudyType(TransitionModel t){
+		studyType = t;
+	}
+	
+	public TransitionModel getStudyType(){
+		return studyType;
+	}
+	
 	public void updateProblemSize(){
 		StringBuffer problemSize = new StringBuffer();
 		problemSize.append("Left:");
-		problemSize.append(problemData.getProblemLength());
+		problemSize.append(problemData.getProblemLength( studyType ));
 
 		mainWindow.updateSize(problemSize.toString());
 	}
