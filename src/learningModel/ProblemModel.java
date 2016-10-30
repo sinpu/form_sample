@@ -5,7 +5,9 @@ import java.awt.List;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,8 +50,9 @@ public class ProblemModel {
 	
 	//answer
 	private String[] answerImageURI = new String[8];
-
-	private String SYSTEM_PASS = "src/learning_system/";
+	private String FS = File.separator;
+	private String SYSTEM_PASS = "src"+ FS + "learning_system" + FS;
+	//private String SYSTEM_PASS = "learning_system" + FS;
 	private String PROBLEM_LIST_FILE = "problem.csv";
 	private String SUB_PROBLEM_LIST_FILE = "subkyoji.csv";
 	private String MAIN = "problem";
@@ -82,8 +85,19 @@ public class ProblemModel {
 		
 		// set problem list
 		try{
-			FileReader fReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_LIST_FILE));
-			BufferedReader bReader = new BufferedReader(fReader);
+		   /* この奮闘も jar のせい
+			* FileReader fReader = new FileReader(new File(SYSTEM_PASS+PROBLEM_LIST_FILE));
+			* FileReader fReader = new FileReader(new File( PROBLEM_LIST_FILE ));
+			* System.out.println(SYSTEM_PASS + PROBLEM_LIST_FILE);
+			* InputStream is = getClass().getResourceAsStream(SYSTEM_PASS + PROBLEM_LIST_FILE);
+			* InputStreamReader isr = new InputStreamReader(is);
+			*
+			* URL url = getClass().getClassLoader().getResource(PROBLEM_LIST_FILE);
+			* FileReader fReader = new FileReader(new File(url.getFile()));
+			*/
+
+			InputStream  is = getClass().getClassLoader().getResourceAsStream(PROBLEM_LIST_FILE);
+			BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
 
 			while( (tmpString = bReader.readLine()) != null){
 				listString = tmpString;
@@ -104,8 +118,9 @@ public class ProblemModel {
 		
 		// set sub problem list
 		try{
-			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + SUB_PROBLEM_LIST_FILE));
-			BufferedReader bReader = new BufferedReader(fileReader);
+			//FileReader fileReader = new FileReader(new File(SYSTEM_PASS + SUB_PROBLEM_LIST_FILE));
+			InputStream  is = getClass().getClassLoader().getResourceAsStream(SUB_PROBLEM_LIST_FILE);
+			BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
 			String[] dataString = new String[5];
 			int i = 0;
 			
@@ -172,6 +187,7 @@ public class ProblemModel {
 		resetSubCheckList();
 		
 		if( checkProblemList.isEmpty() ) {
+			//resetKyojiList();  /*** テスト必須 ***/
 			if(t == TransitionModel.Subject) return false;
 			
 			indexOfProblem++;
@@ -206,9 +222,10 @@ public class ProblemModel {
 		boolean check = answerModel.getCheckAnswer();
 		if(!check){ //wrong
 			int[] value = answerModel.getSubList();
-			for(int i = 0; i < SUB_PROBLEM_MAX; i++){
+			for(int i = 0; i < SUB_PROBLEM_MAX; i++){   //ここ怪しい
 				subCheckList[i] += value[i];
 			}
+			makeKyojiList(answerModel.getKyojiList());
 			killFrag = false;
 		}
 		
@@ -247,15 +264,15 @@ public class ProblemModel {
 	public void setSubProblem(){
 		if(!discrimeTypeMAIN()) return ;
 		
-		int[] point = checkSubProblem();
-		for(int i = 0 ; i < 3 ; i++){
-			if(subCheckList[point[i]] == 0) continue;
-			String tmpURI = subProblemList.get(point[i]);
+		//int[] point = checkSubProblem();
+		for(int i = 0 ; i < SUB_PROBLEM_MAX ; i++){
+			if(subCheckList[i] == 0) continue;
+			String tmpURI = subProblemList.get(i);
 			if(!contaionString(tmpURI, checkProblemList)){
 				checkProblemList.add( 1, tmpURI);
 			}
 			setProblem(SUB ,tmpURI);
-			makeKyojiList();
+			//makeKyojiList();
 			
 			//System.out.println(giveKyojiList.size() +":"+ tmpURI);
 		}
@@ -285,15 +302,15 @@ public class ProblemModel {
 		return k;
 	}
 	
-	private void makeKyojiList(){
-		/* まだ要らない
-		 *  giveKyojiList.clear();
-		 */
-		String[] tmp = kyojiImageURI.split("<>");
-		for(String kyoji : tmp){
-			String kyojiURI = SYSTEM_PASS + KYOJI + "/" + kyoji;
-			if( !contaionString(kyojiURI,giveKyojiList) )giveKyojiList.add(kyojiURI);
+	private void makeKyojiList(ArrayList<String> kyojiList){		
+		
+		//String[] tmp = kyojiImageURI.split("<>");
+		for(String kyoji : kyojiList){
+			//String kyojiURI = SYSTEM_PASS + KYOJI + "/" + kyoji + ".jpg";
+			String kyojiURI = kyoji + ".jpg";
+			if( !contaionString(kyojiURI,giveKyojiList) ) giveKyojiList.add(kyojiURI);
 		}
+		
 	}
 	
 	/* import Problem and setting Selections */
@@ -304,21 +321,33 @@ public class ProblemModel {
 		
 		
 		try{
-			FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE + "/" + fileName + "/" + fileName +".csv"));
-			BufferedReader bReader = new BufferedReader(fileReader);
+
+			String uri = fileName + ".csv";
+			//System.out.println(uri);
+			InputStream  is = getClass().getClassLoader().getResourceAsStream(uri);
+			//FileReader fileReader = new FileReader(new File(SYSTEM_PASS + PROBLEM_TYPE + FS + fileName + FS + fileName +".csv"));
+			BufferedReader bReader = new BufferedReader( new InputStreamReader(is));
 
 			char[] check = new char[SUB_PROBLEM_MAX];
 			while( (tmpString = bReader.readLine()) != null){
 				String[] answerData = tmpString.split("\t");
 				
-				if(answerData[0].contains(PROBLEM_TYPE)) problemImageURI = SYSTEM_PASS + PROBLEM_TYPE + "/" + fileName + "/" + answerData[0];
-				if(answerData[0].contains(KYOJI)) kyojiImageURI =  answerData[0];
+				//if(answerData[0].contains(PROBLEM_TYPE)) problemImageURI = SYSTEM_PASS + PROBLEM_TYPE + FS + fileName + FS + answerData[0];
+				if(answerData[0].contains(PROBLEM_TYPE)) problemImageURI = answerData[0];
+				/* こんな汚い書き方は jar のせい */
+				//if(answerData[0].contains(KYOJI)) kyojiImageURI =  answerData[0];
 				
-				for(int i = 3 ,j = 0 ; i < answerData.length ; i++,j++){
+				for(int i = 3 ,j = 0 ; i < answerData.length - 1 ; i++,j++){
 					check[j] = answerData[i].charAt(0);
 				}
 				
-				answerMap.put(answerData[1],new AnswerModel(answerData[1],answerData[2].charAt(0),check) );
+				String[] kyoji = answerData[answerData.length - 1].split("<>") ;
+				ArrayList<String> kyojiList = new ArrayList<String>();
+				for(String tmp : kyoji){
+					kyojiList.add(tmp);
+				}
+				
+				answerMap.put(answerData[1],new AnswerModel(answerData[1],answerData[2].charAt(0),check ,kyojiList) );
 				answerList.add(answerData[1]);
 			}
 						
@@ -327,12 +356,29 @@ public class ProblemModel {
 		}
 	}
 	
+	public void setKyojiRightAnswer(String answer){
+		AnswerModel ans = answerMap.get(answer);
+		
+		if( null == ans ) return ;
+		
+		if(ans.getCheckAnswer()){ //答えが正解のものを判定
+			makeKyojiList( ans.getKyojiList() );
+		}		
+	}
+	
+	public void setWrongFlag(){
+		killFrag = false;
+	}
+	
 	public void startStudy(String problemName ){
 		if( "problem01".equals(problemName) ) indexOfProblem = 0;
 		checkProblemList.add( problemName );
 		setProblem(MAIN, problemName);
 	}
 	
+	public void resetKyojiList(){
+		giveKyojiList.clear();
+	}
 	
 	public void resetCheckList(){
 		checkProblemList.clear();

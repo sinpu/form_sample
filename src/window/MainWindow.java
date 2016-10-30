@@ -47,6 +47,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.Buffer;
 import java.sql.Date;
 
 import javax.swing.SwingConstants;
@@ -67,6 +72,8 @@ public class MainWindow extends JFrame implements WindowListener{
 	
 	private JSplitPane splitPane;
 	private JTextField problemSize;
+	
+	private final static String digiUrl = "http://www.digicre.net/sinpu/cai/caiDataInput.php";
 
 	/**
 	 * Launch the application.
@@ -90,6 +97,7 @@ public class MainWindow extends JFrame implements WindowListener{
 	 * Create the application.
 	 */
 	public MainWindow() {
+		//System.getProperty("user.name")
 		user = new LearnerModel(System.getProperty("user.name"),"0000", "1111");
 
 		initialize();		
@@ -106,7 +114,7 @@ public class MainWindow extends JFrame implements WindowListener{
 		frame = this;
 	
 
-		frame.setBounds(100, 100, 900, 600);
+		frame.setBounds(100, 100, 900, 620);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(this);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
@@ -220,12 +228,66 @@ public class MainWindow extends JFrame implements WindowListener{
 	
 	private void recordData(){
 		user.setEndTime();
-
-		System.out.println(user.getStartTime().toString());
-		System.out.println(user.getEndTime().toString());
-		System.out.println(user.reqStudyTime());
 		
-		System.out.println(user.getDataToString());
+		StringBuffer urlBuffer = new StringBuffer();
+		
+		String startTime = user.getStartTime().toString();
+		String endTime = user.getEndTime().toString();
+		String userid = user.getID();
+		String userData = user.getDataToString();
+		Double studyTime = user.reqStudyTime();
+		
+		System.out.println(startTime);
+		System.out.println(endTime);
+		System.out.println(studyTime);
+		System.out.println(userid);
+		System.out.println(userData);
+		
+		urlBuffer.append(digiUrl);
+		urlBuffer.append("?");
+		urlBuffer.append("USER=");
+		urlBuffer.append(userid);
+		
+		urlBuffer.append("&");
+		urlBuffer.append("DATA=");
+		
+		urlBuffer.append("START::");
+		urlBuffer.append(startTime.replace(" ", ":"));
+		urlBuffer.append("<>");
+		
+		urlBuffer.append("END::");
+		urlBuffer.append(endTime.replace(" ", ":"));
+		urlBuffer.append("<>");
+		
+		urlBuffer.append("STUDY_TIME::");
+		urlBuffer.append(studyTime);
+		urlBuffer.append("<>");
+		
+		urlBuffer.append("DATA::");
+		urlBuffer.append(userData);
+
+		HttpURLConnection connection;
+		
+		try {
+			URL url = new URL( urlBuffer.toString() );
+			connection = (HttpURLConnection)url.openConnection();
+			
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+			connection.setRequestMethod("GET");
+			
+			BufferedReader bReader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"JISAutoDetect"));
+			String tmp;
+			while ( null != (tmp = bReader.readLine())){
+				System.out.println("data::" + tmp);
+			}
+			
+			connection.disconnect();
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void updateSize(String data){

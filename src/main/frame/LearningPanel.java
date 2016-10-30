@@ -2,11 +2,16 @@ package main.frame;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,10 +23,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JViewport;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.xml.crypto.Data;
+
+import org.eclipse.ui.internal.handlers.NewEditorHandler;
 
 import learningModel.AnswerModel;
 import learningModel.ProblemModel;
@@ -29,7 +41,7 @@ import menu.TransitionModel;
 
 import window.MainWindow;
 
-public class LearningPanel extends JPanel implements AbstractPanel,ActionListener{
+public class LearningPanel extends JPanel implements AbstractPanel,ActionListener,MouseListener{
 	
 	//main window
 	private MainWindow mainWindow;
@@ -37,6 +49,11 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	//answer view
 	private JFrame answerWindow;
 	private JPanel answerImagePanel;
+	private JPanel thumbnailPanel;
+	private JSplitPane splitPane;
+	private JScrollPane scrollPane;
+	private JViewport viewport;
+	private JScrollBar scrollBar;
 	
 	//problem model
 	private ProblemModel problemData;
@@ -54,10 +71,14 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	private JButton checkBtn;
 	private JButton backBtn;
 	
-	private ImageIcon right = new ImageIcon("src/learning_system/image/right_answer.png");
-	private ImageIcon wrong = new ImageIcon("src/learning_system/image/wrong_answer.png");
+	//private ImageIcon right = new ImageIcon("src/learning_system/image/right_answer.png");
+	//private ImageIcon wrong = new ImageIcon("src/learning_system/image/wrong_answer.png");
+	private ImageIcon right = new ImageIcon( getClass().getClassLoader().getResource("right_answer.png"));
+	private ImageIcon wrong = new ImageIcon( getClass().getClassLoader().getResource("wrong_answer.png"));
+		
 	
 	private TransitionModel studyType;
+	private int kyojiCard = 0;
 	
 	public String problemSize = "";
 	
@@ -91,7 +112,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.add(splitPane_1);		
 	
-		subjectLabel = new JLabel(new ImageIcon(problemData.getProblem()),JLabel.CENTER);
+		subjectLabel = new JLabel(new ImageIcon( getClass().getClassLoader().getResource(problemData.getProblem())),JLabel.CENTER);
 		splitPane_1.setLeftComponent(subjectLabel);
 		
 		JPanel panel_2 = new JPanel();
@@ -173,7 +194,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	
 	/* set Image of Problem */
 	private void setProblemImage(){
-		subjectLabel.setIcon(new ImageIcon(problemData.getProblem()));
+		subjectLabel.setIcon(new ImageIcon( getClass().getClassLoader().getResource(problemData.getProblem())));
 	}
 
 	@Override
@@ -200,6 +221,7 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 			/* finish movement */
 			if(!problemData.nextProblem( studyType )) {
 				changePanel(TransitionModel.Home);
+				updateProblemSize();
 				return ;
 			}
 			setProblemImage();
@@ -212,11 +234,13 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 	/* Grading Answer */
 	private void checkAnswer(){
 		ArrayList<String> ansList = new ArrayList<String>();
+		int k = 0;
 		
 		for(int i = 0 ; i < rbAnswerButtons.length ; i++){
 			if(rbAnswerButtons[i].isSelected()){
+				k++;
 				String answer = rbAnswerButtons[i].getText();
-				ansList.add(answer);
+				ansList.add( actAnswer(answer) );
 				if( problemData.checkProblemAnswer( answer )){
 					rbAnswerButtons[i].setBackground(Color.CYAN);
 					rbAnswerButtons[i].setIcon(right);
@@ -224,46 +248,96 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 					rbAnswerButtons[i].setBackground(Color.ORANGE);
 					rbAnswerButtons[i].setIcon(wrong);
 				}
-			}			
+			}else {
+				String answer = rbAnswerButtons[i].getText();
+				problemData.setKyojiRightAnswer(answer);
+			}
 		}
 		
-		mainWindow.user.setRecord(problemData.getProblemName(), ansList);
+		if( k == 0 ){
+			problemData.setWrongFlag();
+			ansList.add("NoAnswer");
+		}
+		
+		mainWindow.user.setRecord(problemData.getProblem(), ansList);
 		problemData.setSubProblem();
 		showBestAnswer();
 		nextBtn.setVisible(true);
 		checkBtn.setEnabled(false);
 	}
 	
+	private String actAnswer(String answer){
+		StringBuffer newAnswer = new StringBuffer();
+		
+		for(char tmp : answer.toCharArray()){
+			if( tmp == ' ') continue;
+			
+			newAnswer.append(tmp);
+		}
+		
+		return newAnswer.toString();
+	}
+	
 	/*  */
 	private void showBestAnswer(){
 		ArrayList<String> tmpList = problemData.getKyojiURIlist();
+		
 		if(tmpList.isEmpty()) return;
 		
-		if(null == answerWindow || !answerWindow.isShowing()){
-			answerWindow = new JFrame();
-			answerWindow.setBounds(1000, 100, 900, 600);
-			answerWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
-			
-			answerImagePanel = new JPanel();
-			answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
-			//answerWindow.add(answerImagePanel);
-
-			JScrollPane scrollPane = new JScrollPane(answerImagePanel);
-			answerWindow.add(scrollPane);
-			
-			
-			for(String kyojiURI : problemData.getKyojiURIlist()){
-
-				//some answer need some JLavel
-				answerImagePanel.add( new JLabel(new ImageIcon( kyojiURI ) ));
-
-			}
-			
-			answerWindow.setVisible(true);
-		}else{
-			//for(String uri : model[]) answerImagePanel.add...
+		
+		if(null != answerWindow ){
+			answerWindow.setVisible(false);
 		}
+		
+		answerWindow = new JFrame();
+		Point point = mainWindow.getLocationOnScreen();
+		answerWindow.setBounds(point.x + 900, point.y, 800, 450);
+		answerWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		answerWindow.getContentPane().setLayout(new BoxLayout(answerWindow.getContentPane(), BoxLayout.X_AXIS));
+			
+		splitPane = new JSplitPane();
+		
+		thumbnailPanel = new JPanel();
+		thumbnailPanel.setLayout(new BoxLayout(thumbnailPanel, BoxLayout.Y_AXIS));
+		
+		answerImagePanel = new JPanel();
+		answerImagePanel.setLayout(new BoxLayout(answerImagePanel, BoxLayout.Y_AXIS));
+		//answerWindow.add(answerImagePanel);
+		
+		scrollPane = new JScrollPane(answerImagePanel);
+//				viewport = scrollPane.getViewport();
+		scrollBar = scrollPane.getVerticalScrollBar();
+			
+		answerWindow.getContentPane().add(splitPane);
+		splitPane.setRightComponent(scrollPane);
+		splitPane.setLeftComponent(thumbnailPanel);
+			
+		int i = 0;
+		for(String kyojiURI : tmpList){
+			ImageIcon icon = new ImageIcon( getClass().getClassLoader().getResource(kyojiURI) );
+			JLabel lbl = new JLabel( icon );
+			lbl.setAlignmentY(1f);
+			lbl.setBorder(new LineBorder(Color.BLUE));
+			answerImagePanel.add( lbl );
+			//System.out.println(icon.getIconHeight());
+				
+			ImageIcon thumbnail = new ImageIcon();
+			Image mini = icon.getImage().getScaledInstance((int)(icon.getIconWidth() * 0.3), (int)(icon.getIconHeight() * 0.3), Image.SCALE_SMOOTH);
+			thumbnail.setImage( mini );
+			JLabel imageLbl = new JLabel( thumbnail );
+			imageLbl.setName( kyojiURI );
+			imageLbl.setBorder( new LineBorder(Color.BLACK)); 
+			imageLbl.addMouseListener(this);
+			thumbnailPanel.add( imageLbl );
+			i++;
+		}
+			
+		//余白作るためだけという
+		JLabel tmp = new JLabel();
+		tmp.setSize(new Dimension(answerImagePanel.getWidth(), 150));
+		answerImagePanel.add(tmp);
+			
+		answerWindow.setVisible(true);
 		
 	}
 	
@@ -281,5 +355,49 @@ public class LearningPanel extends JPanel implements AbstractPanel,ActionListene
 		problemSize.append(problemData.getProblemLength( studyType ));
 
 		mainWindow.updateSize(problemSize.toString());
+	}
+	
+	private int searchImageIndex( String filename ){
+		int i = 0;
+		
+		for(String imageName : problemData.getKyojiURIlist() ){
+			if( imageName.equals( filename ) ) return i;
+			i++;
+		}
+		
+		return 0;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		JLabel tmp = (JLabel)e.getSource();
+		int index = searchImageIndex( tmp.getName() );
+		
+		scrollBar.setValue(328 * index);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

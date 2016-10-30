@@ -65,14 +65,17 @@ public class LearnerModel {
 	}
 	
 	public double reqStudyTime(){
+		/*
 		Calendar startTime = Calendar.getInstance();
 		startTime.setTime(sTime);
 
 		Calendar endTime = Calendar.getInstance();
 		endTime.setTime(eTime);
+		*/
+	
 		
 		/* long is mili Sec*/
-		long differentTime = endTime.getTimeInMillis() - startTime.getTimeInMillis();
+		long differentTime = eTime.getTime() - sTime.getTime();
 		int minites = 1000 * 60;
 		double studyTime = (double)( differentTime / minites );
 		
@@ -86,7 +89,20 @@ public class LearnerModel {
 	}
 	
 	public void setRecord(String problemName, ArrayList<String> answerList){
-		recodeMap.put(problemName, answerList);
+		
+		
+		if( null == recodeMap.get(problemName) || recodeMap.get(problemName).isEmpty()){
+			recodeMap.put(problemName, answerList);
+		} else {
+			for(int i = 1 ; ; i++){
+				String fileName = problemName + "(" + i + ")";
+				if( null == recodeMap.get(fileName) || recodeMap.get(fileName).isEmpty() ){
+					recodeMap.put( fileName , answerList);
+					break;
+				}
+			}
+		}
+		
 	}
 	
 	public String getDataToString(){
@@ -94,25 +110,25 @@ public class LearnerModel {
 		
 		dataBuffer.append("name::");
 		dataBuffer.append( getName() );
-		dataBuffer.append("\t");
+		dataBuffer.append("<>");
 
-		dataBuffer.append("id::");
-		dataBuffer.append( getID() );
-		dataBuffer.append("\t");
-		
-		dataBuffer.append("***Record***");
-		dataBuffer.append("\t");
+		dataBuffer.append("Record::");
+		dataBuffer.append("<>");
+
 		for(String key : recodeMap.keySet()){
 			dataBuffer.append( key );
 			dataBuffer.append("::");
+			
 			ArrayList<String> ansList = recodeMap.get( key );
+			if( null == ansList || ansList.isEmpty() ) break;
+			
 			for(String answer : ansList){
 				dataBuffer.append( answer );
 				dataBuffer.append(",");
 			}
 			int index = dataBuffer.lastIndexOf(",");
 			dataBuffer.deleteCharAt( index );
-			dataBuffer.append("\t");
+			dataBuffer.append("<>");
 		}
 		
 		return dataBuffer.toString();

@@ -49,6 +49,7 @@ public class HomePanel extends JPanel implements ActionListener,AbstractPanel{
 		this.add(txtHelloLearner);
 		txtHelloLearner.setFont(new Font("Dialog", Font.BOLD, 23));
 		txtHelloLearner.setHorizontalAlignment(SwingConstants.CENTER);
+		//txtHelloLearner.setText("Hello!");
 		txtHelloLearner.setText("Hello " + mainWindowPanelFrame.getUser().getName() +"!!");
 		txtHelloLearner.setColumns(10);
 		txtHelloLearner.setEditable(false);
